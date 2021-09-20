@@ -56,10 +56,10 @@ Trong phiên bản 3.5, để hỗ trợ IPv6, các thay đổi sau đã đượ
 Hệ thống hiện hỗ trợ nhiều thư viện địa chỉ, có thể được chọn thông qua các mục cấu hình sau trong tệp cấu hình:
 
 ```
-$_config['ipdb']['setting']['fullstack'] = '';	// 系统使用的全栈IP库，优先级最高
-$_config['ipdb']['setting']['default'] = '';	// 系统使用的默认IP库，优先级最低
-$_config['ipdb']['setting']['ipv4'] = 'tiny';	// 系统使用的默认IPv4库，留空为使用默认库
-$_config['ipdb']['setting']['ipv6'] = 'v6wry'; // 系统使用的默认IPv6库，留空为使用默认库
+$_config['ipdb']['setting']['fullstack'] = '';	// Thư viện IP toàn ngăn xếp được hệ thống sử dụng, với mức độ ưu tiên cao nhất
+$_config['ipdb']['setting']['default'] = '';	// Thư viện IP mặc định được hệ thống sử dụng, có mức ưu tiên thấp nhất
+$_config['ipdb']['setting']['ipv4'] = 'tiny';	// Thư viện IPv4 mặc định được hệ thống sử dụng, hãy để trống để sử dụng thư viện mặc định
+$_config['ipdb']['setting']['ipv6'] = 'v6wry'; // Thư viện IPv6 mặc định được hệ thống sử dụng, hãy để trống để sử dụng thư viện mặc định
 ```
 
 地址库对应的class为 `ip_<地址库名称>` ，位于 `source/class/ip` 下面。系统会根据配置自动加载相应的class，相应的class也可以有自己的配置项，其规则为：
