@@ -125,19 +125,14 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 
 **提示：由于 PHP 认为实现了 ArrayAccess 接口的对象并非完全等同于数组，因此原有依赖 array_key_exists 的插件或二次开发站点应取消对其的依赖。**
 
-#### 4. Hỗ trợ tất cả các công tắc chức năng bao gồm cả diễn đàn
-
-3.5现在支持几乎所有功能的开关，管理员甚至可以关闭论坛，只使用门户。相关的修改请点击 [PR291](https://gitee.com/Discuz/DiscuzX/pulls/291)
-
-
-#### 5. Các thay đổi khác
+#### 4. Các thay đổi khác
 
 * 增加了一个测试框架，可在后台运行，代码位于 `upload/tests` 下，测试用例可在 `upload/tests/class` 下添加。欢迎大家通过Pull Request提交测试用例
 * 修改了安装程序最后一步的日志输出方式，现在整个创建数据库的过程日志都可实时显示
 * 不再使用mysql驱动，只使用mysqli
 * 内置了function_debug.php文件，通过 `$_config['debug'] = 1` 打开
 
-#### 6. Yêu cầu môi trường hoạt động tối thiểu
+#### 5. Yêu cầu môi trường hoạt động tối thiểu
 
 **Mẹo bảo mật: Chúng tôi đặc biệt khuyên bạn nên sử dụng hệ điều hành, máy chủ web, PHP, cơ sở dữ liệu, bộ nhớ đệm và phần mềm khác vẫn còn trong thời gian hỗ trợ của nhóm phát triển. Phần mềm vượt quá thời hạn hỗ trợ có thể mang lại những rủi ro bảo mật chưa biết cho trang web của bạn .**
 **Mẹo về hiệu suất: Khi MySQL <5.7 hoặc MariaDB <10.2, hiệu suất InnoDB giảm nghiêm trọng hơn. Do đó, các trang web chạy trên hệ thống sản xuất nên được nâng cấp lên MySQL> = 5.7 hoặc MariaDB> = 10.2 để tránh sự cố này.**
