@@ -4,19 +4,19 @@
 #### - Lỗi cấu trúc cơ sở dữ liệu gây mất dữ liệu
 #### - Một số lỗi chức năng khiến trang web không chạy được
 #### - Lỗ hổng bảo mật khiến máy chủ bị xâm nhập
-#### Bao gồm nhưng không giới hạn loạt hậu quả nghiêm trọng trên, vui lòng xác nhận rằng khả năng kỹ thuật của bạn đủ để điều khiển 3.5 trước khi sử dụng nó!
+#### Vui lòng xác nhận rằng khả năng kỹ thuật của bạn đủ để điều khiển 3.5 trước khi sử dụng nó!
 
-## Cấu trúc cơ sở dữ liệu của 3.5 sẽ được cập nhật bất cứ lúc nào. Mỗi khi người dùng hiện tại cập nhật mã, hãy đảm bảo đồng bộ hóa tất cả các thay đổi của tệp sql trong thư mục cài đặt!
+## Cấu trúc cơ sở dữ liệu của 3.5 sẽ được cập nhật bất cứ lúc nào.
 
 
 
-### **3.5版本说明** 
+### **3.5 ghi chú phát hành** 
 
-相对于3.4版本，做了以下修改：
+So với phiên bản 3.4, những thay đổi sau đã được thực hiện:
 
-#### 1. 数据库相关变更
+#### 1. Các thay đổi liên quan đến cơ sở dữ liệu
 
-3.5版本，支持InnoDB与MyISAM两种数据库引擎，在两种引擎下数据库都不再支持utf8编码，转而支持utf8mb4编码。
+Phiên bản 3.5 hỗ trợ hai công cụ cơ sở dữ liệu InnoDB và MyISAM. Dưới cả hai công cụ, cơ sở dữ liệu không còn hỗ trợ mã hóa utf8 mà thay vào đó hỗ trợ mã hóa utf8mb4.
 
 ##### 1.1 数据库表结构的变更：
 
