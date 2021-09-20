@@ -1,5 +1,5 @@
-# 【破坏性变更警告】
-## 2月27日合并的代码中需要跟进数据库修改，否则会造成用户首次可以登录，第二次无法登录！
+# [Cảnh báo thay đổi phá hoại]
+## Mã được hợp nhất vào ngày 27 tháng 2 cần phải theo dõi sửa đổi cơ sở dữ liệu, nếu không sẽ khiến người dùng đăng nhập lần đầu và không đăng nhập được lần thứ hai!
 存量 X3.5 网站更新代码后，需要执行 `ALTER TABLE uc_members MODIFY COLUMN password varchar(255) NOT NULL DEFAULT '', MODIFY COLUMN salt varchar(20) NOT NULL DEFAULT ''`; 进行数据库升级（ uc_ 可能为 pre_ucenter_ ，具体参照贵站设置 ），否则将导致网站无法登录，请知悉！
 
 
