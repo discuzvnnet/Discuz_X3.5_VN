@@ -111,7 +111,7 @@ $_config['ipgetter']['dnslist']['header'] = 'HTTP_X_FORWARDED_FOR';
 $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 ```
 
-#### 3. 缓存
+#### 3. Bộ nhớ đệm
 
 3.5非常大的增强了对Redis缓存的支持，在使用了Redis的情况下，完全消除了对内存表的使用。包括：
 
@@ -125,19 +125,19 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 
 **提示：由于 PHP 认为实现了 ArrayAccess 接口的对象并非完全等同于数组，因此原有依赖 array_key_exists 的插件或二次开发站点应取消对其的依赖。**
 
-#### 4. 支持包括论坛在内在所有功能开关
+#### 4. Hỗ trợ tất cả các công tắc chức năng bao gồm cả diễn đàn
 
 3.5现在支持几乎所有功能的开关，管理员甚至可以关闭论坛，只使用门户。相关的修改请点击 [PR291](https://gitee.com/Discuz/DiscuzX/pulls/291)
 
 
-#### 5. 其它改动
+#### 5. Các thay đổi khác
 
 * 增加了一个测试框架，可在后台运行，代码位于 `upload/tests` 下，测试用例可在 `upload/tests/class` 下添加。欢迎大家通过Pull Request提交测试用例
 * 修改了安装程序最后一步的日志输出方式，现在整个创建数据库的过程日志都可实时显示
 * 不再使用mysql驱动，只使用mysqli
 * 内置了function_debug.php文件，通过 `$_config['debug'] = 1` 打开
 
-#### 6. 最低运行环境要求
+#### 6. Yêu cầu môi trường hoạt động tối thiểu
 
 **安全提示：我们强烈建议您使用仍在开发团队支持期内的操作系统、Web服务器、PHP、数据库、内存缓存等软件，超出支持期的软件可能会对您的站点带来未知的安全隐患。**
 **性能提示：当 MySQL < 5.7 或 MariaDB < 10.2 时， InnoDB 性能下降较为严重，因此在生产系统上运行的站点应升级版本至 MySQL >= 5.7 或 MariaDB >= 10.2 以避免此问题。**
@@ -147,62 +147,10 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 | PHP     | >= 5.6.0   | 7.3 - 8.0   | 依赖 XML 扩展、 JSON 扩展、 GD 扩展 >= 1.0 ，PHP 8.0 为测试性支持 |
 | MySQL   | >= 5.5.3   | 5.7 - 8.0   | 如使用 MariaDB ，推荐版本为 >= 10.2                              |
 
-### **简介** 
-
-Discuz! X 官方 Git (https://gitee.com/Discuz/DiscuzX) ，简体中文 UTF8 版本
-
-### **声明**
-您可以 Fork 本站代码，但未经许可 **禁止** 在本产品的整体或任何部分基础上以发展任何派生版本、修改版本或第三方版本用于 **重新分发** 
-
-### **DxGit Forker 交流群**
-参与本项目PR的小伙伴，可以私信 [@zoewho](https://gitee.com/zoewho) 、[@DiscuzX](https://gitee.com/3dming)，提供QQ，加入DxGit Forker QQ群交流。
-
-[点击查看如何提交代码到本项目](https://gitee.com/Discuz/DiscuzX/wikis/%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E5%88%B0%E6%9C%AC%E9%A1%B9%E7%9B%AE?sort_id=3466289)
-
-### **发布版下载**
-[点击下载发布版](https://gitee.com/Discuz/DiscuzX/attach_files) 
-|
-[备用下载地址](https://www.dismall.com/thread-73-1-1.html)
-
-*感谢 [DiscuzFans](https://gitee.com/3dming/DiscuzL/attach_files) 提供简体GBK、简体UTF8、繁体UTF8的打包版*
-
-### **免费协助安装** 
-
-为方便站长基于 Discuz! X 搭建网站，[Discuz! 应用中心](https://addon.dismall.com/) 为站长提供免费安装 Discuz! X  的服务，详情咨询QQ  1453650
-
-
-### **安装、升级教程**
-使用发布版的用户，查阅安装包中的 readme.html 文件，使用码云原版的用户，查看：[安装教程](https://gitee.com/Discuz/DiscuzX/wikis/%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B?sort_id=3466132)、[升级教程](https://gitee.com/Discuz/DiscuzX/wikis/%E5%8D%87%E7%BA%A7%E6%96%B9%E6%B3%95?sort_id=9978)
-
-
-### **相关网站**
- 
-[Discuz! X 官方论坛](https://www.discuz.net/) 
-|
-[Discuz! 应用中心](https://addon.dismall.com/) 
-|
-[Discuz! 开放平台](https://open.dismall.com/) 
-|
-[Discuz! 开发文档](https://open.dismall.com/?ac=document&page=dev) 
-
- 
-[Discuz! Q 官方网站](https://discuz.com/) 
-|
-[Discuz! Q 官方论坛](https://discuz.chat/)
-|
-[DNSPod](https://www.dnspod.cn/)
-|
-[商标注册](https://tm.cloud.tencent.com/)
-|
-[域名注册](https://dnspod.cloud.tencent.com/)
-
-### **感谢 Fans**
-
-[DiscuzFans](https://gitee.com/sinlody/DiscuzFans)  [DiscuzLite](https://gitee.com/3dming/DiscuzL)
 
 ### **Tải xuống bản dựng hàng ngày**
 
-Discuz! X提供3.4(稳定版)和正在开发中的3.5(不稳定版本)的每日构建，在有提交的第二天早上，可以下载到简体GBK、简体UTF8、繁体BIG5、繁体UTF8的打包版本。
+Discuz! X cung cấp các bản dựng hàng ngày gồm 3.4 (phiên bản ổn định) và 3.5 (phiên bản không ổn định) đang được phát triển.
 
 [Bấm để mở](https://www.discuz.net/daily/)
 
