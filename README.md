@@ -142,7 +142,7 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 **安全提示：我们强烈建议您使用仍在开发团队支持期内的操作系统、Web服务器、PHP、数据库、内存缓存等软件，超出支持期的软件可能会对您的站点带来未知的安全隐患。**
 **性能提示：当 MySQL < 5.7 或 MariaDB < 10.2 时， InnoDB 性能下降较为严重，因此在生产系统上运行的站点应升级版本至 MySQL >= 5.7 或 MariaDB >= 10.2 以避免此问题。**
 
-| 软件名称 | 最低要求   | 推荐版本     | 其他事项                                                        |
+| Tên | Yêu cầu tối thiểu   | Phiên bản được đề xuất     | Khác                                                        |
 | ------- | ---------- | ----------- | -------------------------------------------------------------- |
 | PHP     | >= 5.6.0   | 7.3 - 8.0   | 依赖 XML 扩展、 JSON 扩展、 GD 扩展 >= 1.0 ，PHP 8.0 为测试性支持 |
 | MySQL   | >= 5.5.3   | 5.7 - 8.0   | 如使用 MariaDB ，推荐版本为 >= 10.2                              |
@@ -153,11 +153,6 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 Discuz! X cung cấp các bản dựng hàng ngày gồm 3.4 (phiên bản ổn định) và 3.5 (phiên bản không ổn định) đang được phát triển.
 
 [Bấm để mở](https://www.discuz.net/daily/)
-
-### **Lời nhắc nhở thân thiện**
-- 本站不再发布其他编码的版本，请下载后自行通过[转码工具](https://gitee.com/Discuz/DiscuzX/attach_files)转码，或者下载本站授权的[打包版](https://gitee.com/3dming/DiscuzL/attach_files)
-- Git 版的 Release 版本号不再更新，但 DiscuzFans 的打包版会更新
-- 由于 X3.2、X3.3 已停更，X3.4 漏洞和相关修补同样适用于 X3.2、X3.3 版本，请随时关注[更新列表](https://gitee.com/Discuz/DiscuzX/commits/master)，您可进行手动修补，让自己的站点时刻保持最安全的状态!
 
 ### Ảnh chụp màn hình
 ![Thông tin hệ thống](./readme/screenshot.png "Ảnh chụp màn hình thông tin hệ thống")
