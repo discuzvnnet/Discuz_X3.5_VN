@@ -142,10 +142,10 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 **安全提示：我们强烈建议您使用仍在开发团队支持期内的操作系统、Web服务器、PHP、数据库、内存缓存等软件，超出支持期的软件可能会对您的站点带来未知的安全隐患。**
 **性能提示：当 MySQL < 5.7 或 MariaDB < 10.2 时， InnoDB 性能下降较为严重，因此在生产系统上运行的站点应升级版本至 MySQL >= 5.7 或 MariaDB >= 10.2 以避免此问题。**
 
-| Tên | Yêu cầu tối thiểu   | Phiên bản được đề xuất     | Khác                                                        |
+| Tên |Tối thiểu   | Đề xuất     | Khác                                                        |
 | ------- | ---------- | ----------- | -------------------------------------------------------------- |
-| PHP     | >= 5.6.0   | 7.3 - 8.0   | 依赖 XML 扩展、 JSON 扩展、 GD 扩展 >= 1.0 ，PHP 8.0 为测试性支持 |
-| MySQL   | >= 5.5.3   | 5.7 - 8.0   | 如使用 MariaDB ，推荐版本为 >= 10.2                              |
+| PHP     | >= 5.6.0   | 7.3 - 8.0   | Dựa vào tiện ích mở rộng XML, tiện ích mở rộng JSON, tiện ích mở rộng GD> = 1.0, PHP 8.0 là hỗ trợ thử nghiệm |
+| MySQL   | >= 5.5.3   | 5.7 - 8.0   | Nếu bạn sử dụng MariaDB, phiên bản được đề xuất là >= 10.2                              |
 
 
 ### **Tải xuống bản dựng hàng ngày**
