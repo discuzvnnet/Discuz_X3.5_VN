@@ -77,8 +77,6 @@ Hệ thống hiện có thư viện IPv4 tích hợp sẵn và thư viện IPv6
 
 Giờ đây, địa chỉ IP đã bị cấm, `*` không còn được sử dụng làm ký tự đại diện nữa mà sử dụng [Subnet Mask (CIDR)](https://cloud.tencent.com/developer/article/1392116)
 
-IP封禁的配置，现在保存在pre_common_banned表中，**每次**用户访问的时候，都会触发检查。现在的检查效率较高，每次只会产生一个带索引的SQL查询（基于VARBINARY类型的大小比较）。对于一般的站点性能不会带来问题。另外可以启用Redis缓存，来进一步提高性能。另外还有一个配置项可关闭此功能，使用外部的防火墙等来进行IP封禁管理：
-
 ```
 $_config['security']['useipban'] = 1; // Cho dù bật/tắt chức năng IP, các trang web tải cao có thể bỏ chặn chức năng này với Máy chủ HTTP/CDN/SLB/WAF để giảm áp lực máy chủ
 ```
@@ -90,12 +88,6 @@ Việc mua lại địa chỉ IP, giờ đây chỉ REMOTE_ADDR được tin c�
 ```
 /**
  * Phần mở rộng chuyển đổi IP
- * 为空为使用默认体系，非空情况下会自动调用source/class/ip/getter_值.php内的get方法获取IP地址。
- * 系统提供dnslist(IP反解析域名白名单)、serverlist(IP地址白名单，支持CIDR)、header扩展，具体请参考扩展文件。
- * 性能提示：自带的两款工具由于依赖RDNS、CIDR判定等操作，对系统效率有较大影响，建议大流量站点使用HTTP Server
- * 或CDN/SLB/WAF上的IP黑白名单等逻辑实现CDN IP地址白名单，随后使用header扩展指定服务商提供的IP头的方式实现。
- * 安全提示：由于UCenter、UC_Client独立性及扩展性原因，您需要单独修改相关文件的相关业务逻辑，从而实现此类功能。
- * $_config['ipgetter']下除setting外均可用作自定义IP获取模型设置选项，也欢迎大家PR自己的扩展IP获取模型。
  * Đối với cài đặt của mô hình thu nhận IP mở rộng, vui lòng sử dụng định dạng:
  * Ví dụ:
  * 	$_config['ipgetter']['onlinechk']['server'] = '100.64.10.24';
