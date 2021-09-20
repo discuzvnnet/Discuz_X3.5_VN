@@ -76,7 +76,7 @@ Hệ thống hiện có thư viện IPv4 tích hợp sẵn và thư viện IPv6
 
 ##### 2.2 Cấm IP
 
-Giờ đây, địa chỉ IP đã bị cấm, `*` không còn được sử dụng làm ký tự đại diện nữa mà sử dụng[Subnet Mask (CIDR)](https://cloud.tencent.com/developer/article/1392116)
+Giờ đây, địa chỉ IP đã bị cấm, `*` không còn được sử dụng làm ký tự đại diện nữa mà sử dụng [Subnet Mask (CIDR)](https://cloud.tencent.com/developer/article/1392116)
 
 IP封禁的配置，现在保存在pre_common_banned表中，**每次**用户访问的时候，都会触发检查。现在的检查效率较高，每次只会产生一个带索引的SQL查询（基于VARBINARY类型的大小比较）。对于一般的站点性能不会带来问题。另外可以启用Redis缓存，来进一步提高性能。另外还有一个配置项可关闭此功能，使用外部的防火墙等来进行IP封禁管理：
 
@@ -200,16 +200,16 @@ Discuz! X 官方 Git (https://gitee.com/Discuz/DiscuzX) ，简体中文 UTF8 版
 
 [DiscuzFans](https://gitee.com/sinlody/DiscuzFans)  [DiscuzLite](https://gitee.com/3dming/DiscuzL)
 
-### **每日构建下载**
+### **Tải xuống bản dựng hàng ngày**
 
 Discuz! X提供3.4(稳定版)和正在开发中的3.5(不稳定版本)的每日构建，在有提交的第二天早上，可以下载到简体GBK、简体UTF8、繁体BIG5、繁体UTF8的打包版本。
 
-[点击打开](https://www.discuz.net/daily/)
+[Bấm để mở](https://www.discuz.net/daily/)
 
-### **友情提示**
+### **Lời nhắc nhở thân thiện**
 - 本站不再发布其他编码的版本，请下载后自行通过[转码工具](https://gitee.com/Discuz/DiscuzX/attach_files)转码，或者下载本站授权的[打包版](https://gitee.com/3dming/DiscuzL/attach_files)
 - Git 版的 Release 版本号不再更新，但 DiscuzFans 的打包版会更新
 - 由于 X3.2、X3.3 已停更，X3.4 漏洞和相关修补同样适用于 X3.2、X3.3 版本，请随时关注[更新列表](https://gitee.com/Discuz/DiscuzX/commits/master)，您可进行手动修补，让自己的站点时刻保持最安全的状态!
 
-### 截图
-![系统信息](./readme/screenshot.png "系统信息截图")
+### Ảnh chụp màn hình
+![Thông tin hệ thống](./readme/screenshot.png "Ảnh chụp màn hình thông tin hệ thống")
