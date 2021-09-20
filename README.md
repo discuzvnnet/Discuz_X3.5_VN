@@ -67,24 +67,24 @@ $_config['ipdb']['setting']['ipv6'] = 'v6wry'; // Thư viện IPv6 mặc định
 ```
  * Tất cả các mục dưới $_config['ipdb'] có thể được sử dụng làm tùy chọn cài đặt thư viện IP mở rộng.
  * Để mở rộng cài đặt thư viện IP, vui lòng sử dụng định dạng:
- * 		$_config['ipdb']['Tên thư viện ip của tiện ích mở rộng']['Đặt tên mục'] = 'giá trị';
+ * 	$_config['ipdb']['Tên thư viện ip của tiện ích mở rộng']['Đặt tên mục'] = 'giá trị';
  * Ví dụ:
- * 		$_config['ipdb']['redis_ip']['server'] = '172.16.1.8';
+ * 	$_config['ipdb']['redis_ip']['server'] = '172.16.1.8';
 ```
 
 Hệ thống hiện có thư viện IPv4 tích hợp sẵn và thư viện IPv6
 
 ##### 2.2 Cấm IP
 
-现在IP地址封禁，不再使用 `*` 作为通配符，而是使用[子网掩码(CIDR)](https://cloud.tencent.com/developer/article/1392116)的方式来指定要封禁的地址范围。
+Giờ đây, địa chỉ IP đã bị cấm, `*` không còn được sử dụng làm ký tự đại diện nữa mà sử dụng[Subnet Mask (CIDR)](https://cloud.tencent.com/developer/article/1392116)
 
 IP封禁的配置，现在保存在pre_common_banned表中，**每次**用户访问的时候，都会触发检查。现在的检查效率较高，每次只会产生一个带索引的SQL查询（基于VARBINARY类型的大小比较）。对于一般的站点性能不会带来问题。另外可以启用Redis缓存，来进一步提高性能。另外还有一个配置项可关闭此功能，使用外部的防火墙等来进行IP封禁管理：
 
 ```
-$_config['security']['useipban'] = 1; // 是否开启允许/禁止IP功能，高负载站点可以将此功能疏解至HTTP Server/CDN/SLB/WAF上，降低服务器压力
+$_config['security']['useipban'] = 1; // Cho dù bật/tắt chức năng IP, các trang web tải cao có thể bỏ chặn chức năng này với Máy chủ HTTP/CDN/SLB/WAF để giảm áp lực máy chủ
 ```
 
-##### 2.3 IP地址获取
+##### 2.3 Mua lại địa chỉ IP
 
 IP地址获取，现在默认只信任REMOTE_ADDR，其它的因为太容易仿造，默认禁止。获取的方式也可以扩展，在配置文件中增加了以下配置项
 
