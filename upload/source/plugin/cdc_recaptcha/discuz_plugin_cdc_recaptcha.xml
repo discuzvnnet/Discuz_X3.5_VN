@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
+	<item id="Version"><![CDATA[X3.4]]></item>
+	<item id="Time"><![CDATA[2020-01-11 04:36]]></item>
+	<item id="From"><![CDATA[Discuz! Board (https://addon.dismall.com/)]]></item>
+	<item id="Data">
+		<item id="plugin">
+			<item id="available"><![CDATA[1]]></item>
+			<item id="adminid"><![CDATA[0]]></item>
+			<item id="name"><![CDATA[reCAPTCHA v2]]></item>
+			<item id="identifier"><![CDATA[cdc_recaptcha]]></item>
+			<item id="description"><![CDATA[Mã xác minh Google reCAPTCHA, một trong những dịch vụ mã xác minh an toàn, bảo mật và miễn phí trên thế giới.]]></item>
+			<item id="datatables"><![CDATA[]]></item>
+			<item id="directory"><![CDATA[cdc_recaptcha/]]></item>
+			<item id="copyright"><![CDATA[popcorner]]></item>
+			<item id="version"><![CDATA[1.1.3]]></item>
+			<item id="__modules">
+				<item id="0">
+					<item id="name"><![CDATA[cache]]></item>
+					<item id="param"><![CDATA[]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[11]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="1">
+					<item id="name"><![CDATA[mobile]]></item>
+					<item id="param"><![CDATA[]]></item>
+					<item id="menu"><![CDATA[]]></item>
+					<item id="url"><![CDATA[]]></item>
+					<item id="type"><![CDATA[28]]></item>
+					<item id="adminid"><![CDATA[0]]></item>
+					<item id="displayorder"><![CDATA[0]]></item>
+					<item id="navtitle"><![CDATA[]]></item>
+					<item id="navicon"><![CDATA[]]></item>
+					<item id="navsubname"><![CDATA[]]></item>
+					<item id="navsuburl"><![CDATA[]]></item>
+				</item>
+				<item id="seccode">
+					<item id="recaptcha">
+						<item id="name"><![CDATA[recaptcha]]></item>
+						<item id="displayorder"><![CDATA[0]]></item>
+					</item>
+				</item>
+			</item>
+		</item>
+		<item id="version"><![CDATA[X3,X3.1,X3.2,X3.3,X3.4]]></item>
+		<item id="var">
+			<item id="0">
+				<item id="displayorder"><![CDATA[0]]></item>
+				<item id="title"><![CDATA[Máy chủ reCAPTCHA]]></item>
+				<item id="description"><![CDATA[Máy chủ reCAPTCHA. Nếu không hoạt động khắc phục bằng cách thay đổi máy chủ.]]></item>
+				<item id="variable"><![CDATA[domain]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[1 = www.google.com
+2 = www.recaptcha.net
+3 = recaptcha.net
+4 = recaptcha.google.cn]]></item>
+			</item>
+			<item id="1">
+				<item id="displayorder"><![CDATA[1]]></item>
+				<item id="title"><![CDATA[Văn bản trong trường mã xác minh]]></item>
+				<item id="description"><![CDATA[Thông báo hiển thị phía trước mã xác minh]]></item>
+				<item id="variable"><![CDATA[cname]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[Mã xác nhận]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="2">
+				<item id="displayorder"><![CDATA[2]]></item>
+				<item id="title"><![CDATA[Site Key]]></item>
+				<item id="description"><![CDATA[Khóa trang web hộp kiểm reCAPTCHA v2. Vui lòng đăng ký và lấy nó tại trang web của Google https://www.google.com/recaptcha/admin]]></item>
+				<item id="variable"><![CDATA[pubkey]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="3">
+				<item id="displayorder"><![CDATA[3]]></item>
+				<item id="title"><![CDATA[Secret Key]]></item>
+				<item id="description"><![CDATA[Khóa bí mật reCAPTCHA v2. Vui lòng đăng ký và lấy tại trang web của Google. Giữ bí mật. Và không được tiết lộ]]></item>
+				<item id="variable"><![CDATA[privkey]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="4">
+				<item id="displayorder"><![CDATA[4]]></item>
+				<item id="title"><![CDATA[Kích hoạt cho điện thoại]]></item>
+				<item id="description"><![CDATA[Bật nó để hiển thị mã xác minh trên điện thoại. Đối với các trang web sử dụng Discuz! Mobile, ban đầu bạn có thể sử dụng nó. Không đảm bảo rằng nó sẽ hoạt động với tất cả các điện thoại]]></item>
+				<item id="variable"><![CDATA[usemobile]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="5">
+				<item id="displayorder"><![CDATA[5]]></item>
+				<item id="title"><![CDATA[Mẫu màu]]></item>
+				<item id="description"><![CDATA[Google có đưa ra 2 mẫu để bạn lựa chọn, bạn có thể chọn sao cho phù hợp với mẫu mà mình đang sử dụng]]></item>
+				<item id="variable"><![CDATA[theme]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[0 = Light Theme
+1 = Dark Theme]]></item>
+			</item>
+			<item id="6">
+				<item id="displayorder"><![CDATA[6]]></item>
+				<item id="title"><![CDATA[Kích thước]]></item>
+				<item id="description"><![CDATA[Google đưa ra 2 kích thước để bạn lựa chọn, bạn có thể chọn sao cho phù hợp với mẫu của mình]]></item>
+				<item id="variable"><![CDATA[size]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[0 = Tiêu chuẩn
+1 = Ngắn]]></item>
+			</item>
+			<item id="7">
+				<item id="displayorder"><![CDATA[7]]></item>
+				<item id="title"><![CDATA[Đang tải biểu tượng]]></item>
+				<item id="description"><![CDATA[Mở mục này, biểu tượng hoạt ảnh đang tải sẽ xuất hiện trong quá trình tải]]></item>
+				<item id="variable"><![CDATA[loadicon]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[0 = Không hiển thị
+1 = Hiển thị
+2 = Tiếp tục hiển thị sau khi hết thời gian]]></item>
+			</item>
+			<item id="8">
+				<item id="displayorder"><![CDATA[8]]></item>
+				<item id="title"><![CDATA[Biểu tượng trợ giúp]]></item>
+				<item id="description"><![CDATA[Khi mục này được bật, biểu tượng Mô tả sẽ được hiển thị. Chức năng cụ thể của biểu tượng được xác định bởi các mục cấu hình sau]]></item>
+				<item id="variable"><![CDATA[helpicon]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[0 = Không hiển thị
+1 = Luôn luôn hiển thị
+2 = Hiển thị sau khi hết thời gian tải]]></item>
+			</item>
+			<item id="9">
+				<item id="displayorder"><![CDATA[9]]></item>
+				<item id="title"><![CDATA[Loại mô tả]]></item>
+				<item id="description"><![CDATA[Chức năng của biểu tượng mô tả lựa chọn có thể là một liên kết hoặc văn bản được hiển thị thông qua một cửa sổ bật lên.
+Bạn có thể trỏ đến cửa sổ bật lên hiển thị và nhấp vào liên kết kích hoạt.]]></item>
+				<item id="variable"><![CDATA[helptype]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[3]]></item>
+				<item id="extra"><![CDATA[0 = Liên kết có thể nhấp
+1 = Con chuột trỏ đến lời nhắc bật lên
+2 = Nhấp vào cửa sổ bật lên của chuột
+3 = Tôi muốn tất cả các liên kết bật lên]]></item>
+			</item>
+			<item id="10">
+				<item id="displayorder"><![CDATA[10]]></item>
+				<item id="title"><![CDATA[Miêu tả]]></item>
+				<item id="description"><![CDATA[Khi loại mô tả bao gồm một cửa sổ bật lên nội dung, văn bản được nhập vào đây sẽ được hiển thị trong cửa sổ bật lên.
+Phiên bản di động không hỗ trợ chức năng này (không có chuột)]]></item>
+				<item id="variable"><![CDATA[helpcont]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[Bấm vào đây để xem hướng dẫn]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="11">
+				<item id="displayorder"><![CDATA[11]]></item>
+				<item id="title"><![CDATA[Liên kết trợ giúp]]></item>
+				<item id="description"><![CDATA[Khi loại mô tả có chứa một liên kết, hãy nhấp vào nó để chuyển đến vị trí liên kết được nhập ở đây. Các liên kết bên ngoài yêu cầu HTTP hoặc HTTPs ở đầu.]]></item>
+				<item id="variable"><![CDATA[helplink]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[misc.php?mod=faq]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="12">
+				<item id="displayorder"><![CDATA[12]]></item>
+				<item id="title"><![CDATA[Ngôn ngữ hiển thị]]></item>
+				<item id="description"><![CDATA[Theo mặc định, reCAPTCHA sử dụng ngôn ngữ dựa trên người dùng. Nếu bạn muốn buộc người dùng chỉ nhìn thấy một ngôn ngữ cụ thể, hãy nhập mã ngôn ngữ tại đây.
+Ngôn ngữ: https://developers.google.com/recaptcha/docs/language]]></item>
+				<item id="variable"><![CDATA[hlang]]></item>
+				<item id="type"><![CDATA[text]]></item>
+				<item id="value"><![CDATA[]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="13">
+				<item id="displayorder"><![CDATA[13]]></item>
+				<item id="title"><![CDATA[Bật làm mới]]></item>
+				<item id="description"><![CDATA[ผMột số người dùng có thể gặp phải trường hợp mã xác minh không được tải hoặc không thể sử dụng bình thường. Hãy mở nút này để làm mới mã xác minh một cách riêng biệt mà không làm mới trang web.
+Phiên bản di động không hỗ trợ tính năng này]]></item>
+				<item id="variable"><![CDATA[refresh]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="14">
+				<item id="displayorder"><![CDATA[14]]></item>
+				<item id="title"><![CDATA[Tự động làm mới]]></item>
+				<item id="description"><![CDATA[Sau khi gửi biểu mẫu AJAX, mã xác minh đã nhấp sẽ không hợp lệ do một lần sử dụng. Sau khi bật chức năng này, nó sẽ tự động làm mới khi gửi biểu mẫu]]></item>
+				<item id="variable"><![CDATA[autoref]]></item>
+				<item id="type"><![CDATA[radio]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="15">
+				<item id="displayorder"><![CDATA[15]]></item>
+				<item id="title"><![CDATA[Làm mới bị trì hoãn]]></item>
+				<item id="description"><![CDATA[Đơn vị là mili giây (1000 mili giây = 1 giây). Sau khi gửi biểu mẫu, mã xác minh sẽ được làm mới sau thời gian này]]></item>
+				<item id="variable"><![CDATA[refdelay]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[2000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="16">
+				<item id="displayorder"><![CDATA[16]]></item>
+				<item id="title"><![CDATA[Thông báo lỗi]]></item>
+				<item id="description"><![CDATA[Khi người dùng cá nhân không tải được mã xác minh, bạn có thể nhập nội dung vào đây để hiển thị.
+Hoặc cho người dùng biết để khắc phục sự cố tại đây (ví dụ: tắt tác nhân)]]></item>
+				<item id="variable"><![CDATA[errormsg]]></item>
+				<item id="type"><![CDATA[textarea]]></item>
+				<item id="value"><![CDATA[Mã xác minh reCAPTCHA của Google]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="17">
+				<item id="displayorder"><![CDATA[17]]></item>
+				<item id="title"><![CDATA[Định dạng nội dung]]></item>
+				<item id="description"><![CDATA[Kiểu nội dung của thông báo lỗi có thể là văn bản thuần túy hoặc HTML]]></item>
+				<item id="variable"><![CDATA[msgtype]]></item>
+				<item id="type"><![CDATA[select]]></item>
+				<item id="value"><![CDATA[1]]></item>
+				<item id="extra"><![CDATA[0 = Văn bản thô
+1 = HTML]]></item>
+			</item>
+			<item id="18">
+				<item id="displayorder"><![CDATA[18]]></item>
+				<item id="title"><![CDATA[Lỗi chậm trễ]]></item>
+				<item id="description"><![CDATA[Đơn vị là mili giây (1000 mili giây = 1 giây). Sau thời gian này, thông báo lỗi sẽ được hiển thị cho người dùng. Bạn có thể đặt nó thành 0 để hiển thị thông tin ngay lập tức]]></item>
+				<item id="variable"><![CDATA[delaytime]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[2000]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+			<item id="19">
+				<item id="displayorder"><![CDATA[19]]></item>
+				<item id="title"><![CDATA[Tầm quan trọng tabindex]]></item>
+				<item id="description"><![CDATA[Không được đặt trong các trường hợp bình thường, cài đặt này được sử dụng để điều chỉnh thứ tự chuyển đổi tab trong các biểu mẫu điền số. Nếu không có vấn đề tương tự, vui lòng để trống hoặc thêm 0]]></item>
+				<item id="variable"><![CDATA[tabindex]]></item>
+				<item id="type"><![CDATA[number]]></item>
+				<item id="value"><![CDATA[0]]></item>
+				<item id="extra"><![CDATA[]]></item>
+			</item>
+		</item>
+		<item id="language">
+			<item id="scriptlang">
+				<item id="recaptcha"><![CDATA[reCAPTCHA v2]]></item>
+				<item id="captcha"><![CDATA[Mã xác nhận]]></item>
+				<item id="nokey_error"><![CDATA[Chủ sở hữu của trang web chưa thiết lập các mã được sử dụng trong mã xác minh]]></item>
+				<item id="noie"><![CDATA[รTrình duyệt của bạn quá cũ để tải mã xác minh reCAPTCHA, bạn nên sử dụng trình duyệt không phải IE.]]></item>
+			</item>
+		</item>
+		<item id="license"><![CDATA[[b]Thận trọng:[/b] Trước khi cài đặt, vui lòng xác nhận rằng bạn có quyền truy cập. Mặc dù plugin này hoạt động mà không cần truy cập trang web chính thức của Google, nhưng cần phải có quy trình đăng ký
+
+Sau khi cài đặt, vui lòng truy cập trang web chính thức của Google để đăng ký ([url]https://www.google.com/recaptcha/admin[/url]) Nhận mã và hoàn tất trang cài đặt. Sau đó vào cài đặt bảo mật> thiết lập xác minh. Cuộn xuống dưới cùng và chọn Mã xác minh reCAPTCHA để kích hoạt.
+Quá trình đăng ký: Mở liên kết trên cùng - Tài khoản Google, đăng nhập, điền vào nhãn, chọn hộp kiểm phiên bản thứ hai của loại (các mô hình khác không phù hợp, được chứng nhận, không phù hợp với Discuz), điền tên của biến hàm, kiểm tra Kiểm tra thỏa thuận và nộp
+Sau đó lấy 2 key trên cùng là public key, bên dưới là private key, điền vào trang cài đặt plugin và lưu lại.
+Nếu bạn không hiểu và bạn cần một video hướng dẫn, bạn có thể truy cập Trung tâm Ứng dụng.
+
+Copyright 2019 popcorner
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+NOTICE: Removing or modifying any content about the author will be
+regarded as "remove attribution notices" and is prohibited,
+including name, description and relevant URLs.
+
+Plugin này được cấp phép theo Thỏa thuận Apache License 2.0. Bạn phải tuân thủ các điều khoản của thỏa thuận để cài đặt plugin này.
+Thỏa thuận này không liên kết với Thỏa thuận cấp phép Discuz !.
+Thỏa thuận Apache ở trên là định dạng cho Thỏa thuận Apache tiêu chuẩn. Nếu bạn không hiểu, vui lòng tìm kiếm thêm trên Google "Thỏa thuận cấp phép Apache" (ở trên chỉ để bạn hiểu). Không thay thế cho văn bản gốc)
+Tuyên bố từ chối trách nhiệm: Định nghĩa của tác giả về "NGUYÊN TRẠNG" không bao gồm việc xóa thông tin cá nhân của tác giả như ghi nhận tác giả, đề xuất và bất kỳ URL nào được liên kết trong plugin. Và không chấp nhận bất kỳ sửa đổi liên quan nào]]></item>
+		<item id="intro"><![CDATA[Plugin này kết nối trực tiếp với mô-đun mã xác minh hệ thống. Vì vậy hãy kiểm tra cài đặt bảo mật> đặt xác minh. Đúng sau khi cài đặt plugin này]]></item>
+	</item>
+</root>
