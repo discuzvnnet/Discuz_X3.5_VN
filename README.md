@@ -18,14 +18,14 @@ So với phiên bản 3.4, những thay đổi sau đã được thực hiện:
 
 Phiên bản 3.5 hỗ trợ hai công cụ cơ sở dữ liệu InnoDB và MyISAM. Dưới cả hai công cụ, cơ sở dữ liệu không còn hỗ trợ mã hóa utf8 mà thay vào đó hỗ trợ mã hóa utf8mb4.
 
-##### 1.1 数据库表结构的变更：
+##### 1.1 Các thay đổi đối với cấu trúc bảng cơ sở dữ liệu:
 
-参考 [scheme-change-without-data-loss.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-without-data-loss.sql)
-  * 修改了所有的IP地址，改为varchar(45)类型;
-  * 在所有记录IP地址的地方，增加了端口号的记录;
-  * 在pre_common_banned表中，增加了upperip和lowerip两个VARBINARY(16)类型的字段，用于记录IP地址的封禁范围最大值和最小
-  * 将部分字段改”大“，比如INT改为BIGINT, TEXT改为MEDIUMTEXT等
-  * 为支持IPv6，去掉了所有IP1/IP2/IP3/IP4的字段定义，参考[scheme-change-drop-columns.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-drop-columns.sql)
+Tham khảo [scheme-change-without-data-loss.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-without-data-loss.sql)
+  * Đã sửa đổi tất cả các địa chỉ IP và thay đổi thành loại varchar (45);
+  * Ở tất cả những nơi ghi địa chỉ IP, bản ghi số cổng được thêm vào;
+  * Trong bảng pre_common_banned, hai trường VARBINARY (16), upperip và lowerip, được thêm vào để ghi lại phạm vi địa chỉ IP bị cấm tối đa và tối thiểu
+  * Thay đổi một số trường thành "lớn", chẳng hạn như INT thành BIGINT, TEXT thành MEDIUMTEXT, v.v.
+  * Để hỗ trợ IPv6, tất cả các định nghĩa trường của IP1/IP2/IP3/IP4 đã bị xóa, hãy tham khảo [scheme-change-drop-columns.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-drop-columns.sql)
 
 ##### 1.2 为支持InnoDB相关的变更
 
