@@ -27,37 +27,33 @@ Tham khảo [scheme-change-without-data-loss.sql](https://gitee.com/oldhuhu/Disc
   * Thay đổi một số trường thành "lớn", chẳng hạn như INT thành BIGINT, TEXT thành MEDIUMTEXT, v.v.
   * Để hỗ trợ IPv6, tất cả các định nghĩa trường của IP1/IP2/IP3/IP4 đã bị xóa, hãy tham khảo [scheme-change-drop-columns.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-drop-columns.sql)
 
-##### 1.2 为支持InnoDB相关的变更
+##### 1.2 Để hỗ trợ các thay đổi liên quan đến InnoDB
 
-对于InnoDB数据库引擎，还会做如下变更，参考 [scheme-change-innodb.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-innodb.sql)
-  * 为支持InnoDB，在表pre_common_member_grouppm中增加了一个索引
-  * 为支持InnoDB，在表pre_forum_post中，取消了position的auto_increment属性
+Đối với công cụ cơ sở dữ liệu InnoDB, các thay đổi sau cũng sẽ được thực hiện, tham khảo [scheme-change-innodb.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-innodb.sql)
+  * Để hỗ trợ InnoDB, một chỉ mục đã được thêm vào bảng pre_common_member_grouppm
+  * Để hỗ trợ InnoDB, trong bảng pre_forum_post, thuộc tính auto_increment của vị trí bị hủy
 
-在配置文件中，引入了一个新的相关配置项，这个配置项要正确设置。尤其对于升级用户，否则会导致发帖功能不正常。
+Trong tệp cấu hình, mục cấu hình liên quan mới được giới thiệu và mục cấu hình này phải được đặt chính xác. Đặc biệt là đối với những người dùng đã nâng cấp, nếu không sẽ khiến chức năng đăng bài hoạt động không bình thường.
 
 ```
-/*
- * 数据库引擎，根据自己的数据库引擎进行设置，3.5之后默认为innodb，之前为myisam
- * 对于从3.4升级到3.5，并且没有转换数据库引擎的用户，在此设置为myisam
- */
 $_config['db']['common']['engine'] = 'innodb';
 ```
 
 
-##### 1.3 为支持utf8mb4相关的变更
+##### 1.3 Để hỗ trợ các thay đổi liên quan đến utf8mb4
 
-对于MyISAM引擎，由于1000个字节的索引长度限制，因此要对一些索引做重新定义，参考 [scheme-change-myisam-utf8mb4.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-myisam-utf8mb4.sql)
+Đối với công cụ MyISAM, do giới hạn độ dài chỉ mục là 1000 byte, một số chỉ mục cần được xác định lại, tham khảo [scheme-change-myisam-utf8mb4.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-myisam-utf8mb4.sql)
 
-无论是InnoDB还是MyISAM，所有的表都使用utf8mb4编码与utf8mb4_unicode_ci，参考 [scheme-change-charset.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-charset.sql)
+Cho dù đó là InnoDB hay MyISAM, tất cả các bảng đều sử dụng mã hóa utf8mb4 và utf8mb4_unicode_ci, tham khảo [scheme-change-charset.sql](https://gitee.com/oldhuhu/DiscuzX34235/blob/master/scheme/scheme-change-charset.sql)
 
 
-#### 2. IP相关变更
+#### 2. Các thay đổi liên quan đến IP
 
-在3.5版本中，为了支持IPv6，做了以下变更
+Trong phiên bản 3.5, để hỗ trợ IPv6, các thay đổi sau đã được thực hiện
 
-##### 2.1 IP地址库
+##### 2.1 Thư viện địa chỉ IP
 
-系统现在支持多个地址库，通过配置文件中的以下配置项进行选择：
+Hệ thống hiện hỗ trợ nhiều thư viện địa chỉ, có thể được chọn thông qua các mục cấu hình sau trong tệp cấu hình:
 
 ```
 $_config['ipdb']['setting']['fullstack'] = '';	// 系统使用的全栈IP库，优先级最高
