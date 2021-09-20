@@ -67,7 +67,6 @@ $_config['ipdb']['setting']['ipv6'] = 'v6wry'; // Thư viện IPv6 mặc định
 ```
  * Tất cả các mục dưới $_config['ipdb'] có thể được sử dụng làm tùy chọn cài đặt thư viện IP mở rộng.
  * Để mở rộng cài đặt thư viện IP, vui lòng sử dụng định dạng:
- * 	$_config['ipdb']['Tên thư viện ip của tiện ích mở rộng']['Đặt tên mục'] = 'giá trị';
  * Ví dụ:
  * 	$_config['ipdb']['redis_ip']['server'] = '172.16.1.8';
 ```
@@ -90,8 +89,7 @@ Việc mua lại địa chỉ IP, giờ đây chỉ REMOTE_ADDR được tin c�
 
 ```
 /**
- * IP获取扩展
- * 考虑到不同的CDN服务供应商提供的判断CDN源IP的策略不同，您可以定义自己服务供应商的IP获取扩展。
+ * Phần mở rộng chuyển đổi IP
  * 为空为使用默认体系，非空情况下会自动调用source/class/ip/getter_值.php内的get方法获取IP地址。
  * 系统提供dnslist(IP反解析域名白名单)、serverlist(IP地址白名单，支持CIDR)、header扩展，具体请参考扩展文件。
  * 性能提示：自带的两款工具由于依赖RDNS、CIDR判定等操作，对系统效率有较大影响，建议大流量站点使用HTTP Server
@@ -99,9 +97,8 @@ Việc mua lại địa chỉ IP, giờ đây chỉ REMOTE_ADDR được tin c�
  * 安全提示：由于UCenter、UC_Client独立性及扩展性原因，您需要单独修改相关文件的相关业务逻辑，从而实现此类功能。
  * $_config['ipgetter']下除setting外均可用作自定义IP获取模型设置选项，也欢迎大家PR自己的扩展IP获取模型。
  * Đối với cài đặt của mô hình thu nhận IP mở rộng, vui lòng sử dụng định dạng:
- * 		$_config['ipgetter']['IP获取扩展名称']['设置项名称'] = '值';
  * Ví dụ:
- * 		$_config['ipgetter']['onlinechk']['server'] = '100.64.10.24';
+ * 	$_config['ipgetter']['onlinechk']['server'] = '100.64.10.24';
  */
 $_config['ipgetter']['setting'] = '';
 $_config['ipgetter']['header']['header'] = 'HTTP_X_FORWARDED_FOR';
