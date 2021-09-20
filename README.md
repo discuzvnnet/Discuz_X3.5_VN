@@ -144,7 +144,7 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 
 | Tên |Tối thiểu   | Đề xuất     | Khác                                                        |
 | ------- | ---------- | ----------- | -------------------------------------------------------------- |
-| PHP     | >= 5.6.0   | 7.3 - 8.0   | Tiện ích mở rộng XML, JSON, GD> = 1.0, PHP 8.0 là hỗ trợ thử nghiệm |
+| PHP     | >= 5.6.0   | 7.3 - 8.0   | Tiện ích mở rộng XML, JSON, GD> = 1.0, PHP 8.0 thử nghiệm |
 | MySQL   | >= 5.5.3   | 5.7 - 8.0   | Nếu bạn sử dụng MariaDB, phiên bản được đề xuất là >= 10.2                              |
 
 
