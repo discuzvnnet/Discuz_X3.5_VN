@@ -86,7 +86,7 @@ $_config['security']['useipban'] = 1; // Cho dù bật/tắt chức năng IP, c�
 
 ##### 2.3 Mua lại địa chỉ IP
 
-IP地址获取，现在默认只信任REMOTE_ADDR，其它的因为太容易仿造，默认禁止。获取的方式也可以扩展，在配置文件中增加了以下配置项
+Việc mua lại địa chỉ IP, giờ đây chỉ REMOTE_ADDR được tin cậy theo mặc định và các địa chỉ khác bị cấm theo mặc định vì chúng quá dễ bắt chước.
 
 ```
 /**
@@ -98,9 +98,9 @@ IP地址获取，现在默认只信任REMOTE_ADDR，其它的因为太容易仿�
  * 或CDN/SLB/WAF上的IP黑白名单等逻辑实现CDN IP地址白名单，随后使用header扩展指定服务商提供的IP头的方式实现。
  * 安全提示：由于UCenter、UC_Client独立性及扩展性原因，您需要单独修改相关文件的相关业务逻辑，从而实现此类功能。
  * $_config['ipgetter']下除setting外均可用作自定义IP获取模型设置选项，也欢迎大家PR自己的扩展IP获取模型。
- * 扩展IP获取模型的设置，请使用格式：
+ * Đối với cài đặt của mô hình thu nhận IP mở rộng, vui lòng sử dụng định dạng:
  * 		$_config['ipgetter']['IP获取扩展名称']['设置项名称'] = '值';
- * 比如：
+ * Ví dụ:
  * 		$_config['ipgetter']['onlinechk']['server'] = '100.64.10.24';
  */
 $_config['ipgetter']['setting'] = '';
@@ -111,28 +111,13 @@ $_config['ipgetter']['dnslist']['header'] = 'HTTP_X_FORWARDED_FOR';
 $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 ```
 
-#### 3. Bộ nhớ đệm
+#### 3. Các thay đổi khác
 
-3.5非常大的增强了对Redis缓存的支持，在使用了Redis的情况下，完全消除了对内存表的使用。包括：
+* Khung thử nghiệm đã được thêm vào, có thể chạy ở chế độ nền. Mã nằm trong phần `upload/tests` và các trường hợp thử nghiệm có thể được thêm vào trong phần 'upload/tests/class`.
+* Không sử dụng trình điều khiển mysql nữa, chỉ sử dụng mysqli
+* Tệp function_debug.php tích hợp sẵn, mở nó bằng `$_config['debug'] = 1`
 
-* 所有的原session内存表相关的功能，全部由Redis实现
-* setting不再一次性加载，而是分批按需加载
-* 对IP封禁的检测结果进行缓存
-
-推荐所有的站配置并启用Redis缓存。
-
-由于memcached的功能限制，以上的增强对memcached无效。
-
-**提示：由于 PHP 认为实现了 ArrayAccess 接口的对象并非完全等同于数组，因此原有依赖 array_key_exists 的插件或二次开发站点应取消对其的依赖。**
-
-#### 4. Các thay đổi khác
-
-* 增加了一个测试框架，可在后台运行，代码位于 `upload/tests` 下，测试用例可在 `upload/tests/class` 下添加。欢迎大家通过Pull Request提交测试用例
-* 修改了安装程序最后一步的日志输出方式，现在整个创建数据库的过程日志都可实时显示
-* 不再使用mysql驱动，只使用mysqli
-* 内置了function_debug.php文件，通过 `$_config['debug'] = 1` 打开
-
-#### 5. Yêu cầu môi trường hoạt động tối thiểu
+#### 4. Yêu cầu môi trường hoạt động tối thiểu
 
 **Mẹo bảo mật: Chúng tôi đặc biệt khuyên bạn nên sử dụng hệ điều hành, máy chủ web, PHP, cơ sở dữ liệu, bộ nhớ đệm và phần mềm khác vẫn còn trong thời gian hỗ trợ của nhóm phát triển. Phần mềm vượt quá thời hạn hỗ trợ có thể mang lại những rủi ro bảo mật chưa biết cho trang web của bạn .**
 **Mẹo về hiệu suất: Khi MySQL <5.7 hoặc MariaDB <10.2, hiệu suất InnoDB giảm nghiêm trọng hơn. Do đó, các trang web chạy trên hệ thống sản xuất nên được nâng cấp lên MySQL> = 5.7 hoặc MariaDB> = 10.2 để tránh sự cố này.**
