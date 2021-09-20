@@ -139,8 +139,8 @@ $_config['ipgetter']['dnslist']['list']['0'] = 'comsenz.com';
 
 #### 6. Yêu cầu môi trường hoạt động tối thiểu
 
-**安全提示：我们强烈建议您使用仍在开发团队支持期内的操作系统、Web服务器、PHP、数据库、内存缓存等软件，超出支持期的软件可能会对您的站点带来未知的安全隐患。**
-**性能提示：当 MySQL < 5.7 或 MariaDB < 10.2 时， InnoDB 性能下降较为严重，因此在生产系统上运行的站点应升级版本至 MySQL >= 5.7 或 MariaDB >= 10.2 以避免此问题。**
+**Mẹo bảo mật: Chúng tôi đặc biệt khuyên bạn nên sử dụng hệ điều hành, máy chủ web, PHP, cơ sở dữ liệu, bộ nhớ đệm và phần mềm khác vẫn còn trong thời gian hỗ trợ của nhóm phát triển. Phần mềm vượt quá thời hạn hỗ trợ có thể mang lại những rủi ro bảo mật chưa biết cho trang web của bạn .**
+**Mẹo về hiệu suất: Khi MySQL <5.7 hoặc MariaDB <10.2, hiệu suất InnoDB giảm nghiêm trọng hơn. Do đó, các trang web chạy trên hệ thống sản xuất nên được nâng cấp lên MySQL> = 5.7 hoặc MariaDB> = 10.2 để tránh sự cố này.**
 
 | Tên |Tối thiểu   | Đề xuất     | Khác                                                        |
 | ------- | ---------- | ----------- | -------------------------------------------------------------- |
