@@ -62,19 +62,19 @@ $_config['ipdb']['setting']['ipv4'] = 'tiny';	// Thư viện IPv4 mặc định 
 $_config['ipdb']['setting']['ipv6'] = 'v6wry'; // Thư viện IPv6 mặc định được hệ thống sử dụng, hãy để trống để sử dụng thư viện mặc định
 ```
 
-地址库对应的class为 `ip_<地址库名称>` ，位于 `source/class/ip` 下面。系统会根据配置自动加载相应的class，相应的class也可以有自己的配置项，其规则为：
+`source/class/ip` :
 
 ```
- * $_config['ipdb']下除setting外均可用作自定义扩展IP库设置选项，也欢迎大家PR自己的扩展IP库。
- * 扩展IP库的设置，请使用格式：
- * 		$_config['ipdb']['扩展ip库名称']['设置项名称'] = '值';
- * 比如：
+ * Tất cả các mục dưới $_config['ipdb'] có thể được sử dụng làm tùy chọn cài đặt thư viện IP mở rộng.
+ * Để mở rộng cài đặt thư viện IP, vui lòng sử dụng định dạng:
+ * 		$_config['ipdb']['Tên thư viện ip của tiện ích mở rộng']['Đặt tên mục'] = 'giá trị';
+ * Ví dụ:
  * 		$_config['ipdb']['redis_ip']['server'] = '172.16.1.8';
 ```
 
-系统现在内置一个IPv4库，一个IPv6库
+Hệ thống hiện có thư viện IPv4 tích hợp sẵn và thư viện IPv6
 
-##### 2.2 IP封禁
+##### 2.2 Cấm IP
 
 现在IP地址封禁，不再使用 `*` 作为通配符，而是使用[子网掩码(CIDR)](https://cloud.tencent.com/developer/article/1392116)的方式来指定要封禁的地址范围。
 
