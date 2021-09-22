@@ -7,7 +7,7 @@ body { padding-top: 170px; }
 			#controlheader p a { float: right; margin-top: 8px; height: 25px; line-height: 25px; border: 1px solid #bbb3bf; background: #FEFEFE; text-align: center; }
 			#controlheader p a:hover { text-decoration: none; }
 				#navsave a { margin-right: 2px; padding: 0 12px; border-radius: 4px; background: #E6A234 !important; border-color: #DB7D29 !important; color: #FFF; font-size: 14px; font-weight: 700; text-shadow: 1px 1px 2px #666; }
-				#navcancel a { width: 25px; overflow: hidden; border-radius: 4px; color: #EE831F; }
+				#navcancel a { width: 45px; overflow: hidden; border-radius: 4px; color: #EE831F; }
 					#navcancel a:before { content: "\d7"; font-weight: 700; font-size: 18px; }
 				#button_redo a, #button_undo a { overflow: hidden; color: #4099CA; }
 					#button_redo a:before, #button_undo a:before { content: "\f10b"; display: inline-block; font-family: dzicon; font-size: 20px; }
@@ -15,7 +15,7 @@ body { padding-top: 170px; }
 				#button_redo a { margin-right: 5px; width: 25px; border-radius: 0 4px 4px 0; }
 				#button_undo a { margin-left: 10px; width: 26px; border-right: 0 !important; border-radius: 4px 0 0 4px; }
 					#button_redo.unusable a, #button_undo.unusable a { color: #CCC; cursor: default; }
-				#button_more { margin-right: 20px; width: 15px; overflow: hidden; border-radius: 4px; color: #CCC; }
+				#button_more { margin-right: 20px; width: 45px; overflow: hidden; border-radius: 4px; color: #CCC; }
 					#button_more:before { content: ""; display: inline-block; border-top: 0.3em solid; border-right: 0.3em solid transparent; border-bottom: 0; border-left: 0.3em solid transparent; vertical-align: middle; }
 				#preview a { margin-right: 2px; padding: 0px 8px; color: #444; border-radius: 4px; }
 					#preview.unusable a { color: #AAA; }
