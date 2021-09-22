@@ -246,7 +246,7 @@ $serialize_sql_setting = array (
   'postnocustom' =>
   array (
     0 => 'Áp phích gốc',
-    1 => 'Ghế sô pha',
+    1 => 'Sao chép link',
     2 => 'Băng ghế',
     3 => 'Sàn nhà',
   ),
