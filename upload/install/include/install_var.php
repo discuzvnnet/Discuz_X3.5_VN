@@ -253,7 +253,7 @@ $serialize_sql_setting = array (
   'recommendthread' =>
   array (
     'status' => '0',
-    'addtext' => 'Ửng hộ',
+    'addtext' => 'Ủng hộ',
     'subtracttext' => 'Phản đối',
     'defaultshow' => '1',
     'daycount' => '0',
