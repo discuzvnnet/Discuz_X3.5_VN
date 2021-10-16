@@ -125,6 +125,7 @@ class usercontrol extends base {
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
 		$ip = $this->input('ip');
+		$nolog = $this->input('nolog');
 
 		
 		
@@ -158,7 +159,7 @@ class usercontrol extends base {
 			$_ENV['user']->upgrade_password($username, $password, $user['password'], $user['salt']);
 			$status = $user['uid'];
 		}
-		if($ip && $check_times && $status <= 0) {
+		if(!$nolog && $ip && $check_times && $status <= 0) {
 			$_ENV['user']->loginfailed($username, $ip);
 		}
 		$merge = $status != -1 && !$isuid && $_ENV['user']->check_mergeuser($username) ? 1 : 0;
