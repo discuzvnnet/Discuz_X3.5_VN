@@ -273,6 +273,10 @@ if(submitcheck('profilesubmit')) {
 	}
 	if($setarr) {
 		C::t('common_member_profile')->update($_G['uid'], $setarr);
+		
+		if($_G['setting']['profilehistory']) {
+			C::t('common_member_profile_history')->insert(array_merge($setarr, array('uid' => $_G['uid'], 'dateline' => time())));
+		}
 	}
 
 	if($verifyarr) {
@@ -316,7 +320,7 @@ if(submitcheck('profilesubmit')) {
 	$emailnew = dhtmlspecialchars($_GET['emailnew']);
 	$secmobiccnew = intval($_GET['secmobiccnew']);
 	$secmobilenew = intval($_GET['secmobilenew']);
-	$secmobileseccode = intval($_GET['secmobileseccodenew']);
+	$secmobseccode = intval($_GET['secmobseccodenew']);
 	$ignorepassword = 0;
 	if($_G['setting']['connect']['allow']) {
 		$connect = C::t('#qqconnect#common_member_connect')->fetch($_G['uid']);
@@ -381,14 +385,7 @@ if(submitcheck('profilesubmit')) {
 		include_once libfile('function/member');
 		checkemail($emailnew);
 	}
-	
-	$secmobileseccodestatus = empty($secmobileseccode) ? null : sms::checkseccode($_G['uid'], 0, $secmobiccnew, $secmobilenew, $secmobileseccode);
-	
-	if($_G['setting']['smsstatus'] && !$secmobileseccodestatus) {
-		$ucresult = uc_user_edit(addslashes($_G['username']), $_GET['oldpassword'], $_GET['newpassword'], '', $ignorepassword, $_GET['questionidnew'], $_GET['answernew']);
-	} else {
-		$ucresult = uc_user_edit(addslashes($_G['username']), $_GET['oldpassword'], $_GET['newpassword'], '', $ignorepassword, $_GET['questionidnew'], $_GET['answernew'], $secmobiccnew, $secmobilenew);
-	}
+	$ucresult = uc_user_edit(addslashes($_G['username']), $_GET['oldpassword'], $_GET['newpassword'], '', $ignorepassword, $_GET['questionidnew'], $_GET['answernew'], $secmobiccnew, $secmobilenew);
 	if($ucresult == -1) {
 		showmessage('profile_passwd_wrong', '', array(), array('return' => true));
 	} elseif($ucresult == -4) {
@@ -420,16 +417,16 @@ if(submitcheck('profilesubmit')) {
 		}
 	}
 	
-	if($_G['setting']['smsstatus'] && (strcmp($secmobiccnew, $_G['member']['secmobicc']) != 0 || strcmp($secmobilenew, $_G['member']['secmobile']) != 0) && empty($secmobileseccode)) {
-		$secmobileseccode = random(8, 1);
-		sms::sendseccode($_G['uid'], 0, $secmobiccnew, $secmobilenew, $secmobileseccode);
+	if($_G['setting']['smsstatus'] && (strcmp($secmobiccnew, $_G['member']['secmobicc']) != 0 || strcmp($secmobilenew, $_G['member']['secmobile']) != 0) && empty($secmobseccode)) {
+		$length = $_G['setting']['smsdefaultlength'] ? $_G['setting']['smsdefaultlength'] : 4;
+		
+		
+		sms::send($_G['uid'], 0, 1, $secmobiccnew, $secmobilenew, random($length, 1), 0);
 	}
 	
-	if(($_G['setting']['smsstatus'] && $secmobileseccodestatus) || !$_G['setting']['smsstatus']) {
-		$setarr['secmobicc'] = $secmobiccnew;
-		$setarr['secmobile'] = $secmobilenew;
-		$setarr['secmobilestatus'] = $_G['setting']['smsstatus'];
-	}
+	$setarr['secmobicc'] = $secmobiccnew;
+	$setarr['secmobile'] = $secmobilenew;
+	$setarr['secmobilestatus'] = sms::verify($_G['uid'], 1, $secmobiccnew, $secmobilenew, $secmobseccode);
 	if($setarr) {
 		if($_G['member']['freeze'] == 1) {
 			$setarr['freeze'] = 0;
