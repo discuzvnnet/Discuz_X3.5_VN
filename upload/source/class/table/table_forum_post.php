@@ -679,7 +679,7 @@ class table_forum_post extends discuz_table
 
 	
 	public function insert_post($tableid, $data, $return_insert_id = false, $replace = false, $silent = false) {
-		if (getglobal("config/db/common/engine") !== 'innodb') { 
+		if (strtolower(getglobal("config/db/common/engine")) !== 'innodb') { 
 			return DB::insert(self::get_tablename($tableid), $data, $return_insert_id, $replace, $silent);
 		}
 		$tablename = self::get_tablename($tableid);
