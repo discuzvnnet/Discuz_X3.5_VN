@@ -32,7 +32,7 @@ class helper_makehtml {
 			$code = ob_get_clean().$cend;
 			$code = preg_replace('/language\s*=[\s|\'|\"]*php/is', '_', $code);
 			$code = str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $code);
-			if(file_put_contents($filepath, $code) !== false) {
+			if(file_put_contents($filepath, $code, LOCK_EX) !== false) {
 				$_G['gzipcompress'] ? ob_start('ob_gzhandler') : ob_start();
 				if(self::$callback && is_callable(self::$callback)) {
 					call_user_func(self::$callback);
@@ -98,7 +98,7 @@ class helper_makehtml {
 
 			self::$htmlfilename = $htmldir.$article['htmlname'];
 			if(self::$callbackdata['data']) {
-				self::$callback = array(self, 'portal_article_success');
+				self::$callback = array(get_class(), 'portal_article_success');
 				self::$callbackdata['id'] = $article['aid'];
 			}
 			if($article['allowcomment']) {
@@ -141,7 +141,7 @@ class helper_makehtml {
 			}
 			self::$htmlfilename = $_G['setting']['makehtml']['topichtmldir'].'/'.$topic['name'];
 			if(self::$callbackdata['data']) {
-				self::$callback = array(self, 'portal_topic_success');
+				self::$callback = array(get_class(), 'portal_topic_success');
 				self::$callbackdata['id'] = $topic['topicid'];
 			}
 			if($topic['allowcomment']) {

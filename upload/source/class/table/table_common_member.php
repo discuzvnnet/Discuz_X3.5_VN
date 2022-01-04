@@ -326,6 +326,10 @@ class table_common_member extends discuz_table_archive
 			C::t('common_member_status')->insert($status, false, true);
 			C::t('common_member_count')->insert($count, false, true);
 			C::t('common_member_profile')->insert($profile, false, true);
+			
+			if($_G['setting']['profilehistory']) {
+				C::t('common_member_profile_history')->insert(array_merge($profile, array('uid' => $uid, 'dateline' => time())));
+			}
 			C::t('common_member_field_forum')->insert($ext, false, true);
 			C::t('common_member_field_home')->insert($ext, false, true);
 		}
@@ -358,7 +362,7 @@ class table_common_member extends discuz_table_archive
 		$dateline = TIMESTAMP - 31536000;
 		$temptablename = DB::table('common_member_temp___');
 		if(!DB::fetch_first("SHOW TABLES LIKE '$temptablename'")) {
-			$engine = getglobal("config/db/common/engine") !== 'innodb' ? 'MyISAM' : 'InnoDB';
+			$engine = strtolower(getglobal("config/db/common/engine")) !== 'innodb' ? 'MyISAM' : 'InnoDB';
 			DB::query("CREATE TABLE $temptablename (`uid` int(10) NOT NULL DEFAULT 0,PRIMARY KEY (`uid`)) ENGINE=" . $engine . ";");
 		}
 		$splitnum = max(0, intval($splitnum));
