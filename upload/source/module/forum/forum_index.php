@@ -129,7 +129,8 @@ if(!$gid && $_G['setting']['collectionstatus'] && ($_G['setting']['collectionrec
 }
 
 if(empty($gid) && empty($_G['member']['accessmasks']) && empty($showoldetails) && !IS_ROBOT) {
-	extract(get_index_memory_by_groupid($_G['member']['groupid']));
+	$memindex = get_index_memory_by_groupid($_G['member']['groupid']);
+	extract($memindex);
 	if(defined('FORUM_INDEX_PAGE_MEMORY') && FORUM_INDEX_PAGE_MEMORY) {
 		categorycollapse();
 		if(!defined('IN_ARCHIVER')) {
@@ -145,7 +146,7 @@ $grids = array();
 if($_G['setting']['grid']['showgrid']) {
 	loadcache('grids');
 	$cachelife = $_G['setting']['grid']['cachelife'] ? $_G['setting']['grid']['cachelife'] : 600;
-	$now = dgmdate(TIMESTAMP, lang('form/misc', 'y_m_d')).' '.lang('forum/misc', 'week_'.dgmdate(TIMESTAMP, 'w'));
+	$now = dgmdate(TIMESTAMP, lang('forum/misc', 'y_m_d')).' '.lang('forum/misc', 'week_'.dgmdate(TIMESTAMP, 'w'));
 	if(TIMESTAMP - $_G['cache']['grids']['cachetime'] < $cachelife) {
 		$grids = $_G['cache']['grids'];
 	} else {
