@@ -72,7 +72,7 @@ if($method == 'show_license') {
 			}
 			foreach($items as $k => $v) {
 				$tmp = $$key;
-				$$k = $tmp[$k];
+				$$k = addslashes($tmp[$k]);
 				if(empty($$k) || !preg_match($v['reg'], $$k)) {
 					if(empty($$k) && !$v['required']) {
 						continue;
@@ -139,6 +139,11 @@ if($method == 'show_license') {
 		}
 
 		config_edit();
+
+		@set_time_limit(0);
+		@ignore_user_abort(TRUE);
+		ini_set('max_execution_time', 0);
+		ini_set('mysql.connect_timeout', 0);
 
 		$db = new dbstuff;
 		$db->connect($dbhost, $dbuser, $dbpw, $dbname, DBCHARSET);
