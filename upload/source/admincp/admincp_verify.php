@@ -472,6 +472,10 @@ EOF;
 								$note_lang = 'profile_verify_error';
 							} else {
 								C::t('common_member_profile')->update(intval($value['uid']), $fields);
+								
+								if($_G['setting']['profilehistory']) {
+									C::t('common_member_profile_history')->insert(array_merge($fields, array('uid' => intval($value['uid']), 'dateline' => time())));
+								}
 								$verify['delete'][] = $value['vid'];
 								if($value['verifytype']) {
 									$verify["verify"]['1'][] = $value['uid'];
