@@ -1546,7 +1546,7 @@ function codetag(text, br) {
 	var br = !br ? 1 : br;
 	DISCUZCODE['num']++;
 	if(br > 0 && typeof wysiwyg != 'undefined' && wysiwyg) text = text.replace(/<br[^\>]*>/ig, '\n');
-	text = text.replace(/\$/ig, '$$');
+	text = text.replace(/\$/ig, '$$$$');
 	DISCUZCODE['html'][DISCUZCODE['num']] = '[code]' + text + '[/code]';
 	return '[\tDISCUZ_CODE_' + DISCUZCODE['num'] + '\t]';
 }
@@ -1762,8 +1762,8 @@ function searchFocus(obj) {
 	}
 }
 
-function sendsecmobileseccode(type, secmobicc, secmobile) {
-	url = "misc.php?mod=secmobileseccode&action=send&type=" + type + "&secmobicc=" + secmobicc + "&secmobile=" + secmobile;
+function sendsecmobseccode(svctype, secmobicc, secmobile) {
+	url = "misc.php?mod=secmobseccode&action=send&svctype=" + svctype + "&secmobicc=" + secmobicc + "&secmobile=" + secmobile;
 	var x = new Ajax('JSON');
 	x.getJSON(url, function(s) {
 		if(s.result > 0) {
