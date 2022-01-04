@@ -163,7 +163,17 @@ function pluginupgrade($pluginarray, $installtype) {
 	}
 	$pluginarray['plugin']['modules'] = serialize($pluginarray['plugin']['modules']);
 
-	C::t('common_plugin')->update($plugin['pluginid'], array('version' => $pluginarray['plugin']['version'], 'modules' => $pluginarray['plugin']['modules']));
+	$data = array();
+	foreach($pluginarray['plugin'] as $key => $val) {
+		if($key == 'directory') {
+			$val .= (!empty($val) && substr($val, -1) != '/') ? '/' : '';
+		} elseif($key == 'available') {
+			continue;
+		}
+		$data[$key] = $val;
+	}
+
+	C::t('common_plugin')->update($plugin['pluginid'], $data);
 
 	cloudaddons_installlog($pluginarray['plugin']['identifier'].'.plugin');
 	cron_create($pluginarray['plugin']['identifier']);
@@ -245,10 +255,9 @@ function runquery($sql) {
 
 function createtable($sql, $dbcharset) {
 	$type = strtoupper(preg_replace("/^\s*CREATE TABLE\s+.+\s+\(.+?\).*(ENGINE|TYPE)\s*=\s*([a-z]+?).*$/isU", "\\2", $sql));
-	$defaultengine = getglobal("config/db/common/engine") !== 'innodb' ? 'MyISAM' : 'InnoDB';
+	$defaultengine = strtolower(getglobal("config/db/common/engine")) !== 'innodb' ? 'MyISAM' : 'InnoDB';
 	$type = in_array($type, array('INNODB', 'MYISAM', 'HEAP', 'MEMORY')) ? $type : $defaultengine;
-	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql).
-	(DB::$db->version() > '4.1' ? " ENGINE=$type DEFAULT CHARSET=$dbcharset" : " TYPE=$type");
+	return preg_replace("/^\s*(CREATE TABLE\s+.+\s+\(.+?\)).*$/isU", "\\1", $sql) . " ENGINE=$type DEFAULT CHARSET=" . getglobal("config/db/1/dbcharset") . (getglobal("config/db/1/dbcharset") === 'utf8mb4' ? " COLLATE=utf8mb4_unicode_ci" : "");
 }
 
 function updatetable($sql) {
