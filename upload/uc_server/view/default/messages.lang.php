@@ -54,6 +54,7 @@ $lang = array(
 	'note_false' => 'Thông báo thất bại',
 	'no_permission_for_this_module' => 'Không có quyền quản lý để thay đổi mô-đun',
 	'admin_user_exists' => 'Tên người dùng đã tồn tại, vui lòng quay lại và thử tên người dùng khác.',
+	'admin_mobile_exists' => 'Số điện thoại đã tồn tại, vui lòng quay lại và thử số điện thoại khác.',
 
 	'mail_succeed' => 'Thư đã được gửi thành công ',
 	'mail_false' => 'Không thể gửi thư',
