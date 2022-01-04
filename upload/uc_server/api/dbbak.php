@@ -61,7 +61,7 @@ if(empty($get)) {
 
 $timestamp = time();
 if($timestamp - $get['time'] > 3600) {
-	exit('Authracation has expiried');
+	exit('Authorization has expired');
 }
 $get['time'] = $timestamp;
 
@@ -83,16 +83,13 @@ class dbstuffi {
 			$this->halt('Can not connect to MySQL server');
 		}
 
-		if($this->version() > '4.1') {
-			if($dbcharset) {
-				$this->link->set_charset($dbcharset);
-			}
-
-			if($this->version() > '5.0.1') {
-				$this->query("SET sql_mode=''");
-			}
+		if($dbcharset) {
+			$this->link->set_charset($dbcharset);
 		}
 
+		$this->link->query("SET sql_mode=''");
+
+		$this->link->query("SET character_set_client=binary");
 
 	}
 
@@ -361,13 +358,12 @@ if($get['method'] == 'export') {
 			"# Please visit our website for newest infomation about $apptype\n".
 			"# --------------------------------------------------------\n\n\n".
 			$sqldump;
-		@$fp = fopen($dumpfile, 'wb');
-		@flock($fp, 2);
-		if(@!fwrite($fp, $sqldump)) {
-			@fclose($fp);
+		$fp = fopen($dumpfile, 'cb');
+		if(!($fp && flock($fp, LOCK_EX) && ftruncate($fp, 0) && fwrite($fp, $sqldump) && fflush($fp) && flock($fp, LOCK_UN) && fclose($fp))) {
+			flock($fp, LOCK_UN);
+			fclose($fp);
 			api_msg('database_export_file_invalid', $dumpfile);
 		} else {
-			fclose($fp);
 			auto_next($get, $dumpfile);
 		}
 	} else {
@@ -681,16 +677,17 @@ function sqldumptable($table, $currsize = 0) {
 }
 
 function random($length, $numeric = 0) {
-	PHP_VERSION < '4.2.0' && mt_srand((double)microtime() * 1000000);
+	$seed = base_convert(md5(microtime().$_SERVER['DOCUMENT_ROOT']), 16, $numeric ? 10 : 35);
+	$seed = $numeric ? (str_replace('0', '', $seed).'012340567890') : ($seed.'zZ'.strtoupper($seed));
 	if($numeric) {
-		$hash = sprintf('%0'.$length.'d', mt_rand(0, pow(10, $length) - 1));
-	} else {
 		$hash = '';
-		$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
-		$max = strlen($chars) - 1;
-		for($i = 0; $i < $length; $i++) {
-			$hash .= $chars[mt_rand(0, $max)];
-		}
+	} else {
+		$hash = chr(rand(1, 26) + rand(0, 1) * 32 + 64);
+		$length--;
+	}
+	$max = strlen($seed) - 1;
+	for($i = 0; $i < $length; $i++) {
+		$hash .= $seed[mt_rand(0, $max)];
 	}
 	return $hash;
 }

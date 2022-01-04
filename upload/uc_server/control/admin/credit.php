@@ -131,14 +131,8 @@ class control extends adminbase {
 				include UC_DATADIR.'cache/credits.php';
 			}
 			if($app = $this->cache['apps'][$appid]) {
-				$apifilename = isset($app['apifilename']) && $app['apifilename'] ? $app['apifilename'] : 'uc.php';
-				if(!empty($app['extra']['apppath']) && $this->detectescape($app['extra']['apppath'].'./api/', $apifilename) && substr(strrchr($apifilename, '.'), 1, 10) == 'php' && @include $app['extra']['apppath'].'./api/'.$apifilename) {
-					$uc_note = new uc_note();
-					$data = trim($uc_note->getcreditsettings('', ''));
-				} else {
-					$url = $_ENV['note']->get_url_code('getcreditsettings', '', $appid);
-					$data = trim($_ENV['misc']->dfopen($url, 0, '', '', 1));
-				}
+				$url = $_ENV['note']->get_url_code('getcreditsettings', '', $appid);
+				$data = trim($_ENV['misc']->dfopen($url, 0, '', '', 1));
 				if(!$testrelease) {
 					if(!($data = $this->sync_unserialize($data, ''))) {
 						header('location: '.UC_API.'/admin.php?m=credit&a=sync&step=0&stepapp='.$stepapp.'&testrelease=1&sid='.$this->view->sid);
@@ -156,9 +150,7 @@ class control extends adminbase {
 					$s = "<?php\r\n";
 					$s .= '$_CACHE[\'credits\'] = '.var_export($_CACHE['credits'], TRUE).";\r\n";
 					$s .= "\r\n?>";
-					$fp = @fopen(UC_DATADIR.'cache/credits.php', 'w');
-					@fwrite($fp, $s);
-					@fclose($fp);
+					file_put_contents(UC_DATADIR.'cache/credits.php', $s, LOCK_EX);
 				}
 				header('location: '.UC_API.'/admin.php?m=credit&a=sync&step=0&stepapp='.$stepapp.'&sid='.$this->view->sid);
 			} else {
