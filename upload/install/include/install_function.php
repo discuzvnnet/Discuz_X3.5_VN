@@ -63,7 +63,10 @@ function check_db($dbhost, $dbuser, $dbpw, $dbname, $tablepre) {
 		show_msg('undefine_func', 'mysqli_connect', 0);
 	}
 	if (strpos($dbhost, ":") === FALSE) $dbhost .= ":3306";
-	$link = new mysqli($dbhost, $dbuser, $dbpw);
+
+	mysqli_report(MYSQLI_REPORT_OFF);
+
+	$link = @new mysqli($dbhost, $dbuser, $dbpw);
 	if($link->connect_errno) {
 		$errno = $link->connect_errno;
 		$error = $link->connect_error;
@@ -133,7 +136,7 @@ function env_check(&$env_items) {
 		if($key == 'php') {
 			$env_items[$key]['current'] = PHP_VERSION;
 		} elseif($key == 'attachmentupload') {
-			$env_items[$key]['current'] = @ini_get('file_uploads') ? ini_get('upload_max_filesize') : 'unknow';
+			$env_items[$key]['current'] = @ini_get('file_uploads') ? (min(min(ini_get('upload_max_filesize'), ini_get('post_max_size')), ini_get('memory_limit'))) : 'unknow';
 		} elseif($key == 'gdversion') {
 			$tmp = function_exists('gd_info') ? gd_info() : array();
 			$env_items[$key]['current'] = empty($tmp['GD Version']) ? 'noext' : $tmp['GD Version'];
@@ -569,15 +572,6 @@ function transfer_ucinfo(&$post) {
 	}
 }
 
-if(!function_exists('file_put_contents')) {
-	function file_put_contents($filename, $s) {
-		$fp = @fopen($filename, 'w');
-		@fwrite($fp, $s);
-		@fclose($fp);
-		return TRUE;
-	}
-}
-
 function createtable($sql, $dbver) {
 	$type = strtoupper(preg_replace("/^\s*CREATE TABLE\s+.+\s+\(.+?\).*(ENGINE|TYPE)\s*=\s*([a-z]+?).*$/isU", "\\2", $sql));
 	$type = in_array($type, array('INNODB', 'MYISAM', 'HEAP', 'MEMORY')) ? $type : 'INNODB';
@@ -655,7 +649,9 @@ function show_header() {
 EOT;
 
 	$step > 0 && show_step($step);
-    echo str_repeat('  ', 1024 * 4);
+	echo "\r\n";
+	echo str_repeat('  ', 1024 * 4);
+	echo "\r\n";
 	flush();
 	ob_flush();
 }
@@ -674,15 +670,6 @@ EOT;
 	$quit && exit();
 }
 
-function loginit($logfile) {
-	global $lang;
-	showjsmessage($lang['init_log'].' '.$logfile . "\n");
-	if($fp = @fopen('./forumdata/logs/'.$logfile.'.php', 'w')) {
-		fwrite($fp, '<'.'?PHP exit(); ?'.">\n");
-		fclose($fp);
-	}
-}
-
 function showjsmessage($message) {
 	if(VIEW_OFF) return;
 	append_to_install_log_file($message);
@@ -691,15 +678,76 @@ function showjsmessage($message) {
 	ob_flush();
 }
 
-function random($length) {
-	$hash = '';
-	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
-	$max = strlen($chars) - 1;
-	PHP_VERSION < '4.2.0' && mt_srand((double)microtime() * 1000000);
+function random($length, $numeric = 0) {
+	$seed = base_convert(md5(microtime().$_SERVER['DOCUMENT_ROOT']), 16, $numeric ? 10 : 35);
+	$seed = $numeric ? (str_replace('0', '', $seed).'012340567890') : ($seed.'zZ'.strtoupper($seed));
+	if($numeric) {
+		$hash = '';
+	} else {
+		$hash = chr(rand(1, 26) + rand(0, 1) * 32 + 64);
+		$length--;
+	}
+	$max = strlen($seed) - 1;
 	for($i = 0; $i < $length; $i++) {
-		$hash .= $chars[mt_rand(0, $max)];
+		$hash .= $seed[mt_rand(0, $max)];
 	}
 	return $hash;
+}
+
+function secrandom($length, $numeric = 0, $strong = false) {
+	
+	$chars = $numeric ? array('A','B','+','/','=') : array('+','/','=');
+	$num_find = str_split('CDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
+	$num_repl = str_split('01234567890123456789012345678901234567890123456789');
+	$isstrong = false;
+	if(function_exists('random_bytes')) {
+		$isstrong = true;
+		$random_bytes = function($length) {
+			return random_bytes($length);
+		};
+	} elseif(extension_loaded('mcrypt') && function_exists('mcrypt_create_iv')) {
+		
+		$isstrong = true;
+		$random_bytes = function($length) {
+			$rand = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+			if ($rand !== false && strlen($rand) === $length) {
+				return $rand;
+			} else {
+				return false;
+			}
+		};
+	} elseif(extension_loaded('openssl') && function_exists('openssl_random_pseudo_bytes')) {
+		
+		
+		
+		$isstrong = true;
+		$random_bytes = function($length) {
+			$rand = openssl_random_pseudo_bytes($length, $secure);
+			if($secure === true) {
+				return $rand;
+			} else {
+				return false;
+			}
+		};
+	}
+	if(!$isstrong) {
+		return $strong ? false : random($length, $numeric);
+	}
+	$retry_times = 0;
+	$return = '';
+	while($retry_times < 128) {
+		$getlen = $length - strlen($return); 
+		$bytes = $random_bytes(max($getlen, 12));
+		if($bytes === false) {
+			return false;
+		}
+		$bytes = str_replace($chars, '', base64_encode($bytes));
+		$return .= substr($bytes, 0, $getlen);
+		if(strlen($return) == $length) {
+			return $numeric ? str_replace($num_find, $num_repl, $return) : $return;
+		}
+		$retry_times++;
+	}
 }
 
 function redirect($url) {
@@ -749,7 +797,7 @@ function save_config_file($filename, $config, $default) {
 EOT;
 	$content .= getvars(array('_config' => $config));
 	$content .= "\r\n// ".str_pad('  THE END  ', 50, '-', STR_PAD_BOTH)." //\r\n\r\n?>";
-	file_put_contents($filename, $content);
+	file_put_contents($filename, $content, LOCK_EX);
 }
 
 function setdefault($var, $default) {
@@ -828,7 +876,7 @@ function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 }
 
 function generate_key() {
-	$random = random(32);
+	$random = secrandom(32);
 	$info = md5($_SERVER['SERVER_SOFTWARE'].$_SERVER['SERVER_NAME'].(isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '').$_SERVER['SERVER_PORT'].$_SERVER['HTTP_USER_AGENT'].time());
 	$return = array();
 	for($i=0; $i<64; $i++) {
@@ -845,85 +893,130 @@ function show_db_install() {
 	$allinfo = base64_encode(serialize(compact('dbhost', 'dbuser', 'dbpw', 'dbname', 'tablepre', 'username', 'password', 'email', 'dzucfull', 'uid')));
 	init_install_log_file();
 ?>
-<script type="text/javascript">
-var ajax = {};
-ajax.x = function () {
-    if (typeof XMLHttpRequest !== 'undefined') {return new XMLHttpRequest();}
-    var versions = ["MSXML2.XmlHttp.6.0", "MSXML2.XmlHttp.5.0", "MSXML2.XmlHttp.4.0", "MSXML2.XmlHttp.3.0", "MSXML2.XmlHttp.2.0", "Microsoft.XmlHttp"];
-    var xhr;for (var i = 0; i < versions.length; i++) {try {xhr = new ActiveXObject(versions[i]);break;} catch (e) {}}return xhr;
-};
+		<script type="text/javascript">
+			var ajax = {};
+			ajax.x = function () {
+				if(typeof XMLHttpRequest !== 'undefined') {
+					return new XMLHttpRequest();
+				}
+				var versions = ["MSXML2.XmlHttp.6.0", "MSXML2.XmlHttp.5.0", "MSXML2.XmlHttp.4.0", "MSXML2.XmlHttp.3.0", "MSXML2.XmlHttp.2.0", "Microsoft.XmlHttp"];
+				var xhr;
+				for(var i = 0; i < versions.length; i++) {
+					try {
+						xhr = new ActiveXObject(versions[i]);
+						break;
+					} catch (e) {
+					}
+				}
+				return xhr;
+			};
 
-ajax.send = function (url, callback, method, data, async) {
-    if (async === undefined) {async = true;}
-    var x = ajax.x();x.open(method, url, async);x.onreadystatechange = function () {if ((x.readyState == 4) && (typeof callback == 'function')) {callback(x.responseText)}};if (method == 'POST') {x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');}
-    x.send(data);
-};
+			ajax.send = function (url, callback, method, data, async) {
+				if(async === undefined) {
+					async = true;
+				}
+				var x = ajax.x();
+				x.open(method, url, async);
+				x.onreadystatechange = function () {
+					if((x.readyState == 4) && (typeof callback == 'function')) {
+						callback(x.responseText);
+					}
+				};
+				if(method == 'POST') {
+					x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				}
+				x.send(data);
+			};
 
-ajax.get = function (url, callback) {
-    ajax.send(url, callback, 'GET', null, true);
-};
+			ajax.get = function (url, callback) {
+				ajax.send(url, callback, 'GET', null, true);
+			};
 
-function request_do_db_init() {
-    ajax.get('index.php?<?= http_build_query(array('method'=>'do_db_init','allinfo'=>$allinfo)) ?>', function(callback) {
-            if(callback.indexOf('<?= lang("initdbresult_succ") ?>') !== -1) {
-                append_notice(callback);
-                return;
-            }
-            append_notice("<?= lang('initsys') ?> ... ");
-
-            ajax.get("../misc.php?mod=initsys", function() {
-                append_notice("<?= lang('succeed') ?><br/>");
-                document.getElementById("laststep").value = '<?= lang("initdbresult_succ") ?>';
-                document.getElementById("laststep").disabled = false;
-                window.setTimeout(function() {
-                    window.location='index.php?method=ext_info';
-                }, 2000);
-            });
-    });
-}
-
-function set_notice(str) {
-    document.getElementById('notice').innerHTML = str;
-    document.getElementById('notice').scrollTop = 100000000;
-}
-
-function append_notice(str) {
-    document.getElementById('notice').innerHTML += str;
-    document.getElementById('notice').scrollTop = 100000000;
-}
-
-var old_log_data = '';
-function request_log() {
-    ajax.get('index.php?method=check_db_init_progress', function (data) {
-        if(data === old_log_data){
-            setTimeout(request_log, 1000);
-            return;
-        }
-        old_log_data = data;
-        set_notice(
-		data.split("\n").map(function(l) {
-			if (l.indexOf('<?= lang("failed") ?>') !== -1) {
-				return '<font color="red">' + l + '</font><br/>';
-			} else {
-				return l + '<br/>';
+			function set_notice(str) {
+				document.getElementById('notice').innerHTML = str;
+				document.getElementById('notice').scrollTop = 100000000;
 			}
-		}). join('')
-	);
-	if (data.indexOf('<?= lang("failed") ?>') !== -1) {
-                append_notice("<?= lang('error_quit_msg') ?><br/>");
-		return;
-	}
-        if (data.indexOf('<?= lang("initdbresult_succ") ?>') === -1) {
-            setTimeout(request_log, 200);
-        }
-    });
-}
 
-window.onload = function() {
-    request_do_db_init();
-    setTimeout(request_log, 500);
-}
-</script>
+			function append_notice(str) {
+				document.getElementById('notice').innerHTML += str;
+				document.getElementById('notice').scrollTop = 100000000;
+			}
+
+			function initinput() {
+				window.location='<?php echo 'index.php?step='.($GLOBALS['step']);?>';
+			}
+
+			var old_log_data = '';
+
+			function request_do_db_init() {
+				// 发起数据库初始化请求
+				ajax.get('index.php?<?= http_build_query(array('method' => 'do_db_init', 'allinfo' => $allinfo)) ?>', function() {
+					// 数据库初始化请求完成拉起初始化
+					request_do_initsys();
+				});
+			}
+
+			function request_log() {
+				ajax.get('index.php?method=check_db_init_progress', function (data) {
+					if(data === old_log_data) {
+						setTimeout(request_log, 1000);
+						return;
+					}
+					old_log_data = data;
+					set_notice(
+						data.split("\n").map(function(l) {
+							if(l.indexOf('<?= lang('failed') ?>') !== -1) {
+								return '<font color="red">' + l + '</font><br/>';
+							} else {
+								return l + '<br/>';
+							}
+						}).join('')
+					);
+					if(data.indexOf('<?= lang('failed') ?>') !== -1) {
+						append_notice('<font color="red"><?= lang('error_quit_msg') ?></font><br/>');
+						return;
+					}
+					if(data.indexOf('<?= lang('initdbresult_succ') ?>') === -1) {
+						setTimeout(request_log, 200);
+					}
+				});
+			}
+
+			function request_do_initsys() {
+				var resultDiv = document.getElementById('notice');
+				// 数据库初始化失败不进行系统初始化
+				if(resultDiv.innerHTML.indexOf('<?= lang('failed') ?>') !== -1) {
+					document.getElementById('laststep').value = '<?= lang('error_quit_msg') ?>';
+					return;
+				}
+				if(resultDiv.innerHTML.indexOf('<?= lang('initdbresult_succ') ?>') !== -1) {
+					// 数据库初始化成功就进行系统初始化
+					append_notice("<?= lang('initsys') ?> ... ");
+					ajax.get('../misc.php?mod=initsys', function(callback) {
+						if(callback.indexOf('Access Denied') !== -1 || callback.indexOf('Discuz! Database Error') !== -1 || callback.indexOf('Discuz! System Error') !== -1) {
+							append_notice('<font color="red"><?= lang('failed') ?></font><br/>');
+							append_notice('<font color="red"><?= lang('error_quit_msg') ?></font><br/>');
+							document.getElementById('laststep').value = '<?= lang('error_quit_msg') ?>';
+							return;
+						}
+						append_notice('<?= lang('succeed') ?><br/>');
+						document.getElementById('laststep').value = '<?= lang('succeed') ?>';
+						document.getElementById('laststep').disabled = false;
+						window.setTimeout(function() {
+							window.location='index.php?method=ext_info';
+						}, 1000);
+					});
+				} else {
+					// 数据库初始化状态未知时不做初始化, 一秒钟后重新判断数据库初始化状态
+					setTimeout(request_do_initsys, 1000);
+				}
+			}
+
+			window.onload = function() {
+				request_do_db_init();
+				setTimeout(request_log, 500);
+			}
+		</script>
 		<div id="notice"></div>
 		<div class="btnbox margintop marginbot">
 			<input type="button" name="submit" value="<?php echo lang('install_in_processed');?>" disabled="disabled" id="laststep" onclick="initinput()">
@@ -957,9 +1050,9 @@ function runquery($sql) {
 			if(substr($query, 0, 12) == 'CREATE TABLE') {
 				$name = preg_replace("/CREATE TABLE ([a-z0-9_]+) .*/is", "\\1", $query);
 				if ($db->query(createtable($query, $db->version()))) {
-					showjsmessage(lang('init_table_data').' '.$name.'  ... '.lang('succeed') . "\n");
+					showjsmessage(lang('create_table').' '.$name.'  ... '.lang('succeed') . "\n");
 				} else {
-					showjsmessage(lang('init_table_data').' '.$name.'  ... '.lang('failed') . "\n");
+					showjsmessage(lang('create_table').' '.$name.'  ... '.lang('failed') . "\n");
 					return false;
 				}
 			} elseif(substr($query, 0, 6) == 'INSERT') {
@@ -1408,9 +1501,9 @@ function check_adminuser($username, $password, $email) {
 
 function save_uc_config($config, $file) {
 
-	$success = false;
-
 	list($appauthkey, $appid, $ucdbhost, $ucdbname, $ucdbuser, $ucdbpw, $ucdbcharset, $uctablepre, $uccharset, $ucapi, $ucip) = $config;
+
+	mysqli_report(MYSQLI_REPORT_OFF);
 
 	$link = new mysqli($ucdbhost, $ucdbuser, $ucdbpw, $ucdbname);
 	$uc_connnect = $link ? 'mysql' : '';
@@ -1422,6 +1515,7 @@ function save_uc_config($config, $file) {
 
 
 define('UC_CONNECT', '$uc_connnect');
+define('UC_STANDALONE', 0);
 
 define('UC_DBHOST', '$ucdbhost');
 define('UC_DBUSER', '$ucdbuser');
@@ -1430,6 +1524,9 @@ define('UC_DBNAME', '$ucdbname');
 define('UC_DBCHARSET', '$ucdbcharset');
 define('UC_DBTABLEPRE', '`$ucdbname`.$uctablepre');
 define('UC_DBCONNECT', 0);
+
+define('UC_AVTURL', '');
+define('UC_AVTPATH', '');
 
 define('UC_CHARSET', '$uccharset');
 define('UC_KEY', '$appauthkey');
@@ -1440,16 +1537,15 @@ define('UC_PPP', 20);
 ?>
 EOT;
 
-	if($fp = fopen($file, 'w')) {
-		fwrite($fp, $config);
-		fclose($fp);
-		$success = true;
+	if(file_put_contents($file, $config, LOCK_EX) !== false) {
+		return true;
 	}
-	return $success;
+
+	return false;
 }
 
 function _generate_key() {
-	$random = random(32);
+	$random = secrandom(32);
 	$info = md5($_SERVER['SERVER_SOFTWARE'].$_SERVER['SERVER_NAME'].(isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '').(isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : '').$_SERVER['HTTP_USER_AGENT'].time());
 	$return = array();
 	for($i=0; $i<32; $i++) {
@@ -1482,10 +1578,8 @@ function uc_write_config($config, $file, $password) {
 	$config .= "define('UC_MYKEY', '$ucmykey');\r\n";
 	$config .= "define('UC_DEBUG', false);\r\n";
 	$config .= "define('UC_PPP', 20);\r\n";
-	$fp = fopen($file, 'w');
-	fwrite($fp, $config);
-	fclose($fp);
 
+	file_put_contents($file, $config, LOCK_EX);
 }
 
 function install_uc_server() {
@@ -1606,6 +1700,10 @@ function buildarray($array, $level = 0, $pre = '$_config') {
 	}
 
 	foreach ($array as $key => $val) {
+		if(!preg_match("/^[a-zA-Z0-9_\x7f-\xff]+$/", $key)) {
+			continue;
+		}
+
 		if($level == 0) {
 			$newline = str_pad('  CONFIG '.strtoupper($key).'  ', 70, '-', STR_PAD_BOTH);
 			$return .= "\r\n// $newline //\r\n";
@@ -1656,7 +1754,7 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false)
 
 	$tplpath = dirname($tplfile);
 	if (!is_dir($tplpath)) dmkdir($tplpath);
-	$r = file_put_contents($tplfile, $content);
+	$r = file_put_contents($tplfile, $content, LOCK_EX);
 
 	if ($r && $database) {
 		$_G['db']->query('DELETE FROM '.$_G['tablepre'].'common_template_block WHERE targettplname="'.$targettplname.'"');
@@ -2006,10 +2104,13 @@ function append_to_install_log_file($message, $close = false) {
 	static $fh = false;
 	if (!$fh) {
 		$fh = fopen($file, "a+");
+		flock($fh, LOCK_EX);
 	} 
 	if ($fh) {
 		fwrite($fh, $message);
+		fflush($fh);
 		if ($close) {
+			flock($fh, LOCK_UN);
 			fclose($fh);
 		}
 	}

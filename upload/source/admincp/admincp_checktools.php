@@ -103,6 +103,7 @@ if($operation == 'filecheck') {
 		}
 
 		$weekbefore = TIMESTAMP - 604800;
+		$md5data = is_array($md5data) ? $md5data : array();
 		$md5datanew = is_array($md5datanew) ? $md5datanew : array();
 		$addlist = array_merge(array_diff_assoc($md5data, $md5datanew), is_array($cachelist[2]) ? $cachelist[2] : array());
 		$dellist = array_diff_assoc($md5datanew, $md5data);
@@ -294,9 +295,8 @@ if($operation == 'filecheck') {
 	$testfile = 'test/discuztest.txt';
 	$attach_dir = $_G['setting']['attachdir'];
 	@mkdir($attach_dir.'test', 0777);
-	if($fp = @fopen($attach_dir.'/'.$testfile, 'w')) {
-		fwrite($fp, $testcontent);
-		fclose($fp);
+	if(file_put_contents($attach_dir.'/'.$testfile, $testcontent, LOCK_EX) === false) {
+		$alertmsg = cplang('setting_attach_remote_wtferr');
 	}
 
 	if(!$alertmsg) {

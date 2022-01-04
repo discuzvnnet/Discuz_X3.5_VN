@@ -37,8 +37,8 @@ CREATE TABLE pre_common_admincp_member (
 DROP TABLE IF EXISTS pre_common_admincp_perm;
 CREATE TABLE pre_common_admincp_perm (
   cpgroupid smallint(6) unsigned NOT NULL,
-  perm varchar(255) NOT NULL,
-  UNIQUE KEY cpgroupperm (cpgroupid,perm(40))
+  perm varchar(100) NOT NULL,
+  UNIQUE KEY cpgroupperm (cpgroupid,perm)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_common_admincp_session;
@@ -318,27 +318,27 @@ CREATE TABLE pre_common_block_xml (
 
 DROP TABLE IF EXISTS pre_common_cache;
 CREATE TABLE pre_common_cache (
-  cachekey varchar(255) NOT NULL DEFAULT '',
+  cachekey varchar(190) NOT NULL DEFAULT '',
   cachevalue mediumblob NOT NULL,
   dateline int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (cachekey(50))
+  PRIMARY KEY (cachekey)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_common_card;
 CREATE TABLE pre_common_card (
-  id char(255) NOT NULL DEFAULT '',
+  id varchar(190) NOT NULL DEFAULT '',
   typeid smallint(6) unsigned NOT NULL DEFAULT '1',
   maketype tinyint(1) NOT NULL DEFAULT '0',
   makeruid mediumint(8) unsigned NOT NULL DEFAULT '0',
   price mediumint(8) unsigned NOT NULL DEFAULT '0',
   extcreditskey tinyint(1) NOT NULL DEFAULT '0',
   extcreditsval int(10) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   cleardateline int(10) unsigned NOT NULL DEFAULT '0',
   useddateline int(10) unsigned NOT NULL DEFAULT '0',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (id(50)),
+  PRIMARY KEY (id),
   KEY dateline (dateline)
 ) ENGINE=InnoDB;
 
@@ -493,16 +493,38 @@ DROP TABLE IF EXISTS pre_common_smslog;
 CREATE TABLE pre_common_smslog (
   `smslogid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` mediumint(8) unsigned NOT NULL,
-  `type` int(10) NOT NULL DEFAULT '0',
+  `smstype` int(10) NOT NULL DEFAULT '0',
+  `svctype` int(10) NOT NULL DEFAULT '0',
   `smsgw` int(10) NOT NULL DEFAULT '0',
   `status` int(10) NOT NULL DEFAULT '0',
   `verify` int(10) NOT NULL DEFAULT '0',
   `secmobicc` varchar(3) NOT NULL DEFAULT '',
   `secmobile` varchar(12) NOT NULL DEFAULT '',
-  `sendtime` int(10) unsigned NOT NULL DEFAULT '0',
+  `ip` varchar(45) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   `content` text NOT NULL DEFAULT '',
-  PRIMARY KEY (smslogid),
-  KEY lastsent (secmobicc,secmobile,sendtime)
+  `dateline` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`smslogid`),
+  KEY dateline (`secmobicc`, `secmobile`, `dateline`),
+  KEY uid (uid)
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS pre_common_smslog_archive;
+CREATE TABLE pre_common_smslog_archive (
+  `smslogid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` mediumint(8) unsigned NOT NULL,
+  `smstype` int(10) NOT NULL DEFAULT '0',
+  `svctype` int(10) NOT NULL DEFAULT '0',
+  `smsgw` int(10) NOT NULL DEFAULT '0',
+  `status` int(10) NOT NULL DEFAULT '0',
+  `verify` int(10) NOT NULL DEFAULT '0',
+  `secmobicc` varchar(3) NOT NULL DEFAULT '',
+  `secmobile` varchar(12) NOT NULL DEFAULT '',
+  `ip` varchar(45) NOT NULL DEFAULT '',
+  `port` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `content` text NOT NULL DEFAULT '',
+  `dateline` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`smslogid`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_common_devicetoken;
@@ -518,7 +540,7 @@ CREATE TABLE pre_common_district (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `level` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  usetype tinyint(1) NOT NULL DEFAULT '0',
+  usetype tinyint(3) unsigned NOT NULL DEFAULT '0',
   upid mediumint(8) unsigned NOT NULL DEFAULT '0',
   displayorder smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
@@ -553,7 +575,7 @@ DROP TABLE IF EXISTS pre_common_failedip;
 CREATE TABLE pre_common_failedip (
   ip varchar(45) NOT NULL DEFAULT '',
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
-  count tinyint(1) NOT NULL DEFAULT '0',
+  count tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (ip,lastupdate),
   KEY lastupdate (lastupdate)
 ) ENGINE=InnoDB;
@@ -562,7 +584,7 @@ DROP TABLE IF EXISTS pre_common_failedlogin;
 CREATE TABLE pre_common_failedlogin (
   ip varchar(45) NOT NULL DEFAULT '',
   username char(32) NOT NULL DEFAULT '',
-  count tinyint(1) NOT NULL DEFAULT '0',
+  count tinyint(3) unsigned NOT NULL DEFAULT '0',
   lastupdate int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (ip,username)
 ) ENGINE=InnoDB;
@@ -640,7 +662,7 @@ CREATE TABLE pre_common_magiclog (
   `action` tinyint(1) NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   amount smallint(6) unsigned NOT NULL DEFAULT '0',
-  credit tinyint(1) NOT NULL DEFAULT '0',
+  credit tinyint(3) unsigned NOT NULL DEFAULT '0',
   price mediumint(8) unsigned NOT NULL DEFAULT '0',
   targetid int(10) unsigned NOT NULL DEFAULT '0',
   idtype char(6) DEFAULT NULL,
@@ -701,10 +723,11 @@ CREATE TABLE pre_common_member (
   freeze tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (uid),
   UNIQUE KEY username (username),
-  KEY email (email),
+  KEY email (email(40)),
   KEY groupid (groupid),
   KEY conisbind (conisbind),
-  KEY regdate (regdate)
+  KEY regdate (regdate),
+  KEY secmobile (`secmobile`, `secmobicc`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_common_member_action_log;
@@ -785,7 +808,7 @@ DROP TABLE IF EXISTS pre_common_member_field_forum;
 CREATE TABLE pre_common_member_field_forum (
   uid mediumint(8) unsigned NOT NULL,
   publishfeed tinyint(3) NOT NULL DEFAULT '0',
-  customshow tinyint(1) NOT NULL DEFAULT '26',
+  customshow tinyint(3) unsigned NOT NULL DEFAULT '26',
   customstatus varchar(30) NOT NULL DEFAULT '',
   medals text NOT NULL,
   sightml text NOT NULL,
@@ -804,6 +827,8 @@ CREATE TABLE pre_common_member_field_home (
   domain char(15) NOT NULL DEFAULT '',
   addsize int(10) unsigned NOT NULL DEFAULT '0',
   addfriend smallint(6) unsigned NOT NULL DEFAULT '0',
+  allowasfriend tinyint(1) NOT NULL DEFAULT '1',
+  allowasfollow tinyint(1) NOT NULL DEFAULT '1',
   menunum smallint(6) unsigned NOT NULL DEFAULT '0',
   theme varchar(20) NOT NULL DEFAULT '',
   spacecss text NOT NULL,
@@ -917,9 +942,68 @@ CREATE TABLE pre_common_member_profile (
   PRIMARY KEY (uid)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS pre_common_member_profile_history;
+CREATE TABLE pre_common_member_profile_history (
+  hid int(10) unsigned NOT NULL AUTO_INCREMENT,
+  uid mediumint(8) unsigned NOT NULL,
+  realname varchar(255) NOT NULL DEFAULT '',
+  gender tinyint(1) NOT NULL DEFAULT '0',
+  birthyear smallint(6) unsigned NOT NULL DEFAULT '0',
+  birthmonth tinyint(3) unsigned NOT NULL DEFAULT '0',
+  birthday tinyint(3) unsigned NOT NULL DEFAULT '0',
+  constellation varchar(255) NOT NULL DEFAULT '',
+  zodiac varchar(255) NOT NULL DEFAULT '',
+  telephone varchar(255) NOT NULL DEFAULT '',
+  mobile varchar(255) NOT NULL DEFAULT '',
+  idcardtype varchar(255) NOT NULL DEFAULT '',
+  idcard varchar(255) NOT NULL DEFAULT '',
+  address varchar(255) NOT NULL DEFAULT '',
+  zipcode varchar(255) NOT NULL DEFAULT '',
+  nationality varchar(255) NOT NULL DEFAULT '',
+  birthprovince varchar(255) NOT NULL DEFAULT '',
+  birthcity varchar(255) NOT NULL DEFAULT '',
+  birthdist varchar(20) NOT NULL DEFAULT '',
+  birthcommunity varchar(255) NOT NULL DEFAULT '',
+  resideprovince varchar(255) NOT NULL DEFAULT '',
+  residecity varchar(255) NOT NULL DEFAULT '',
+  residedist varchar(20) NOT NULL DEFAULT '',
+  residecommunity varchar(255) NOT NULL DEFAULT '',
+  residesuite varchar(255) NOT NULL DEFAULT '',
+  graduateschool varchar(255) NOT NULL DEFAULT '',
+  company varchar(255) NOT NULL DEFAULT '',
+  education varchar(255) NOT NULL DEFAULT '',
+  occupation varchar(255) NOT NULL DEFAULT '',
+  position varchar(255) NOT NULL DEFAULT '',
+  revenue varchar(255) NOT NULL DEFAULT '',
+  affectivestatus varchar(255) NOT NULL DEFAULT '',
+  lookingfor varchar(255) NOT NULL DEFAULT '',
+  bloodtype varchar(255) NOT NULL DEFAULT '',
+  height varchar(255) NOT NULL DEFAULT '',
+  weight varchar(255) NOT NULL DEFAULT '',
+  alipay varchar(255) NOT NULL DEFAULT '',
+  icq varchar(255) NOT NULL DEFAULT '',
+  qq varchar(255) NOT NULL DEFAULT '',
+  yahoo varchar(255) NOT NULL DEFAULT '',
+  msn varchar(255) NOT NULL DEFAULT '',
+  taobao varchar(255) NOT NULL DEFAULT '',
+  site varchar(255) NOT NULL DEFAULT '',
+  bio text NOT NULL,
+  interest text NOT NULL,
+  field1 text NOT NULL,
+  field2 text NOT NULL,
+  field3 text NOT NULL,
+  field4 text NOT NULL,
+  field5 text NOT NULL,
+  field6 text NOT NULL,
+  field7 text NOT NULL,
+  field8 text NOT NULL,
+  dateline int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (hid)
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS pre_common_member_profile_setting;
 CREATE TABLE pre_common_member_profile_setting (
-  fieldid varchar(255) NOT NULL DEFAULT '',
+  fieldid varchar(190) NOT NULL DEFAULT '',
   available tinyint(1) NOT NULL DEFAULT '0',
   invisible tinyint(1) NOT NULL DEFAULT '0',
   needverify tinyint(1) NOT NULL DEFAULT '0',
@@ -936,7 +1020,7 @@ CREATE TABLE pre_common_member_profile_setting (
   size smallint(6) unsigned NOT NULL DEFAULT '0',
   choices text NOT NULL,
   validate text NOT NULL,
-  PRIMARY KEY (fieldid(30))
+  PRIMARY KEY (fieldid)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_common_member_security;
@@ -1106,7 +1190,7 @@ DROP TABLE IF EXISTS pre_common_plugin;
 CREATE TABLE pre_common_plugin (
   pluginid smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   available tinyint(1) NOT NULL DEFAULT '0',
-  adminid tinyint(1) NOT NULL DEFAULT '0',
+  adminid tinyint(3) unsigned NOT NULL DEFAULT '0',
   `name` varchar(40) NOT NULL DEFAULT '',
   identifier varchar(40) NOT NULL DEFAULT '',
   description varchar(255) NOT NULL DEFAULT '',
@@ -1213,7 +1297,7 @@ CREATE TABLE pre_common_seccheck (
 DROP TABLE IF EXISTS pre_common_secquestion;
 CREATE TABLE pre_common_secquestion (
   id smallint(6) unsigned NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NOT NULL,
+  `type` tinyint(3) unsigned NOT NULL,
   question text NOT NULL,
   answer varchar(255) NOT NULL,
   PRIMARY KEY (id)
@@ -1227,7 +1311,7 @@ CREATE TABLE pre_common_session (
   username char(15) NOT NULL DEFAULT '',
   groupid smallint(6) unsigned NOT NULL DEFAULT '0',
   invisible tinyint(1) NOT NULL DEFAULT '0',
-  `action` tinyint(1) NOT NULL DEFAULT '0',
+  `action` tinyint(3) unsigned NOT NULL DEFAULT '0',
   lastactivity int(10) unsigned NOT NULL DEFAULT '0',
   lastolupdate int(10) unsigned NOT NULL DEFAULT '0',
   fid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1238,9 +1322,9 @@ CREATE TABLE pre_common_session (
 
 DROP TABLE IF EXISTS pre_common_setting;
 CREATE TABLE pre_common_setting (
-  skey varchar(255) NOT NULL DEFAULT '',
+  skey varchar(190) NOT NULL DEFAULT '',
   svalue text NOT NULL,
-  PRIMARY KEY (skey(40))
+  PRIMARY KEY (skey)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_common_smiley;
@@ -1485,7 +1569,7 @@ CREATE TABLE pre_common_usergroup_field (
   allowanonymous tinyint(1) NOT NULL DEFAULT '0',
   allowsigbbcode tinyint(1) NOT NULL DEFAULT '0',
   allowsigimgcode tinyint(1) NOT NULL DEFAULT '0',
-  allowmagics tinyint(1) NOT NULL,
+  allowmagics tinyint(3) unsigned NOT NULL,
   disableperiodctrl tinyint(1) NOT NULL DEFAULT '0',
   reasonpm tinyint(1) NOT NULL DEFAULT '0',
   maxprice smallint(6) unsigned NOT NULL DEFAULT '0',
@@ -1504,11 +1588,11 @@ CREATE TABLE pre_common_usergroup_field (
   magicsdiscount tinyint(1) NOT NULL,
   maxmagicsweight smallint(6) unsigned NOT NULL,
   allowpostdebate tinyint(1) NOT NULL DEFAULT '0',
-  tradestick tinyint(1) NOT NULL,
-  exempt tinyint(1) NOT NULL,
+  tradestick tinyint(3) unsigned NOT NULL,
+  exempt tinyint(3) unsigned NOT NULL,
   maxattachnum smallint(6) NOT NULL DEFAULT '0',
   allowposturl tinyint(1) NOT NULL DEFAULT '3',
-  allowrecommend tinyint(1) NOT NULL DEFAULT '1',
+  allowrecommend tinyint(3) unsigned NOT NULL DEFAULT '1',
   allowpostrushreply tinyint(1) NOT NULL DEFAULT '0',
   maxfriendnum smallint(6) unsigned NOT NULL DEFAULT '0',
   maxspacesize int(10) unsigned NOT NULL DEFAULT '0',
@@ -1537,9 +1621,9 @@ CREATE TABLE pre_common_usergroup_field (
   domainlength smallint(6) unsigned NOT NULL DEFAULT '0',
   seccode tinyint(1) NOT NULL DEFAULT '1',
   disablepostctrl tinyint(1) NOT NULL DEFAULT '0',
-  allowbuildgroup tinyint(1) NOT NULL DEFAULT '0',
-  allowgroupdirectpost tinyint(1) NOT NULL DEFAULT '0',
-  allowgroupposturl tinyint(1) NOT NULL DEFAULT '0',
+  allowbuildgroup tinyint(3) unsigned NOT NULL DEFAULT '0',
+  allowgroupdirectpost tinyint(3) unsigned NOT NULL DEFAULT '0',
+  allowgroupposturl tinyint(3) unsigned NOT NULL DEFAULT '0',
   edittimelimit int(10) unsigned NOT NULL DEFAULT '0',
   allowpostarticle tinyint(1) NOT NULL DEFAULT '0',
   allowdownlocalimg tinyint(1) NOT NULL DEFAULT '0',
@@ -1563,11 +1647,11 @@ CREATE TABLE pre_common_usergroup_field (
   allowsavereply tinyint(1) NOT NULL DEFAULT '1',
   allowsavenum int(10) unsigned NOT NULL DEFAULT '0',
   allowsetpublishdate tinyint(1) NOT NULL DEFAULT '0',
-  allowfollowcollection tinyint(1) NOT NULL DEFAULT '0',
+  allowfollowcollection tinyint(3) unsigned NOT NULL DEFAULT '0',
   allowcommentcollection tinyint(1) NOT NULL DEFAULT '0',
   allowcreatecollection smallint(6) unsigned NOT NULL DEFAULT '0',
   forcesecques tinyint(1) NOT NULL DEFAULT '0',
-  forcelogin tinyint(1) NOT NULL DEFAULT '0',
+  forcelogin tinyint(3) unsigned NOT NULL DEFAULT '0',
   closead tinyint(1) NOT NULL DEFAULT '0',
   buildgroupcredits smallint(6) unsigned NOT NULL DEFAULT '0',
   allowimgcontent tinyint(1) NOT NULL DEFAULT '0',
@@ -1660,7 +1744,7 @@ CREATE TABLE pre_common_payment_transfer  (
   `realname` varchar(255) NOT NULL,
   `account` varchar(255) NOT NULL,
   `channel` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL,
+  `status` tinyint(3) unsigned NOT NULL,
   `error` varchar(255) DEFAULT NULL,
   `trade_no` varchar(255) DEFAULT NULL,
   `trade_time` int(10) unsigned DEFAULT NULL,
@@ -1822,7 +1906,7 @@ CREATE TABLE pre_forum_attachment (
   tid int(10) unsigned NOT NULL DEFAULT '0',
   pid int(10) unsigned NOT NULL DEFAULT '0',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  tableid tinyint(1) NOT NULL DEFAULT '0',
+  tableid tinyint(3) unsigned NOT NULL DEFAULT '0',
   downloads mediumint(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (aid),
   KEY tid (tid),
@@ -2123,7 +2207,7 @@ CREATE TABLE pre_forum_bbcode (
   replacement text NOT NULL,
   example varchar(255) NOT NULL DEFAULT '',
   explanation text NOT NULL,
-  params tinyint(1) NOT NULL DEFAULT '1',
+  params tinyint(3) unsigned NOT NULL DEFAULT '1',
   prompt text NOT NULL,
   nest tinyint(3) unsigned NOT NULL DEFAULT '1',
   displayorder tinyint(3) NOT NULL DEFAULT '0',
@@ -2447,11 +2531,11 @@ CREATE TABLE pre_forum_groupfield (
   fid mediumint(8) unsigned NOT NULL DEFAULT '0',
   privacy tinyint(1) NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
-  `type` varchar(255) NOT NULL,
+  `type` varchar(100) NOT NULL,
   `data` text NOT NULL,
-  UNIQUE KEY `types` (fid,`type`(40)),
+  UNIQUE KEY `types` (fid,`type`),
   KEY fid (fid),
-  KEY `type` (`type`(40))
+  KEY `type` (`type`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_forum_groupinvite;
@@ -2537,7 +2621,7 @@ CREATE TABLE pre_forum_medal (
   description varchar(255) NOT NULL,
   expiration smallint(6) unsigned NOT NULL DEFAULT '0',
   permission mediumtext NOT NULL,
-  credit tinyint(1) NOT NULL DEFAULT '0',
+  credit tinyint(3) unsigned NOT NULL DEFAULT '0',
   price mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (medalid),
   KEY displayorder (displayorder),
@@ -2688,11 +2772,15 @@ CREATE TABLE pre_forum_post (
   pid int(10) unsigned NOT NULL,
   fid mediumint(8) unsigned NOT NULL DEFAULT '0',
   tid int(10) unsigned NOT NULL DEFAULT '0',
+  repid int(10) unsigned NOT NULL DEFAULT '0',
   `first` tinyint(1) NOT NULL DEFAULT '0',
   author varchar(15) NOT NULL DEFAULT '',
   authorid mediumint(8) unsigned NOT NULL DEFAULT '0',
   `subject` varchar(255) NOT NULL DEFAULT '',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
+  lastupdate int(10) unsigned NOT NULL DEFAULT '0',
+  updateuid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  premsg text NOT NULL,
   message mediumtext NOT NULL,
   useip varchar(45) NOT NULL DEFAULT '',
   `port` smallint(6) unsigned NOT NULL DEFAULT '0',
@@ -2780,6 +2868,17 @@ CREATE TABLE pre_forum_postcomment (
   KEY pid (pid,dateline)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS pre_forum_post_history;
+CREATE TABLE pre_forum_post_history (
+  id int(10) unsigned NOT NULL,
+  pid int(10) unsigned NOT NULL,
+  dateline int(10) unsigned NOT NULL,
+  `subject` varchar(255) NOT NULL DEFAULT '',
+  message mediumtext NOT NULL,
+  PRIMARY KEY (id),
+  KEY pid (pid,dateline)
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS pre_forum_poststick;
 CREATE TABLE pre_forum_poststick (
   tid int(10) unsigned NOT NULL,
@@ -2804,7 +2903,7 @@ CREATE TABLE pre_forum_ratelog (
   pid int(10) unsigned NOT NULL DEFAULT '0',
   uid mediumint(8) unsigned NOT NULL DEFAULT '0',
   username char(15) NOT NULL DEFAULT '',
-  extcredits tinyint(1) NOT NULL DEFAULT '0',
+  extcredits tinyint(3) unsigned NOT NULL DEFAULT '0',
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   score smallint(6) NOT NULL DEFAULT '0',
   reason char(40) NOT NULL DEFAULT '',
@@ -3097,7 +3196,7 @@ CREATE TABLE pre_forum_trade (
   `subject` char(100) NOT NULL,
   price decimal(8,2) NOT NULL,
   amount smallint(6) unsigned NOT NULL DEFAULT '1',
-  quality tinyint(1) NOT NULL DEFAULT '0',
+  quality tinyint(3) unsigned NOT NULL DEFAULT '0',
   locus char(20) NOT NULL,
   transport tinyint(1) NOT NULL DEFAULT '0',
   ordinaryfee smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -3155,10 +3254,10 @@ CREATE TABLE pre_forum_tradelog (
   pid int(10) unsigned NOT NULL,
   orderid varchar(32) NOT NULL,
   tradeno varchar(32) NOT NULL,
-  paytype tinyint(1) NOT NULL DEFAULT '0',
+  paytype tinyint(3) unsigned NOT NULL DEFAULT '0',
   `subject` varchar(100) NOT NULL,
   price decimal(8,2) NOT NULL DEFAULT '0.00',
-  quality tinyint(1) NOT NULL DEFAULT '0',
+  quality tinyint(3) unsigned NOT NULL DEFAULT '0',
   itemtype tinyint(1) NOT NULL DEFAULT '0',
   number smallint(5) unsigned NOT NULL DEFAULT '0',
   tax decimal(6,2) unsigned NOT NULL DEFAULT '0.00',
@@ -3462,7 +3561,7 @@ CREATE TABLE pre_home_doing (
   ip varchar(45) NOT NULL DEFAULT '',
   `port` smallint(6) unsigned NOT NULL DEFAULT '0',
   replynum int(10) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (doid),
   KEY uid (uid,dateline),
   KEY dateline (dateline)
@@ -3647,7 +3746,7 @@ CREATE TABLE pre_home_pic (
   click7 smallint(6) unsigned NOT NULL DEFAULT '0',
   click8 smallint(6) unsigned NOT NULL DEFAULT '0',
   magicframe tinyint(6) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (picid),
   KEY uid (uid),
   KEY albumid (albumid,dateline)
@@ -3766,9 +3865,9 @@ CREATE TABLE pre_home_visitor (
 
 DROP TABLE IF EXISTS pre_mobile_setting;
 CREATE TABLE pre_mobile_setting (
-  skey varchar(255) NOT NULL DEFAULT '',
+  skey varchar(190) NOT NULL DEFAULT '',
   svalue text NOT NULL,
-  PRIMARY KEY (skey(40))
+  PRIMARY KEY (skey)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS pre_portal_article_content;

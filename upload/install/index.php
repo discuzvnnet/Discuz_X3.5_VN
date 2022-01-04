@@ -102,7 +102,7 @@ if($method == 'show_license') {
 			}
 			foreach($items as $k => $v) {
 				$tmp = $$key;
-				$$k = $tmp[$k];
+				$$k = addslashes($tmp[$k]);
 				if(empty($$k) || !preg_match($v['reg'], $$k)) {
 					if(empty($$k) && !$v['required']) {
 						continue;
@@ -244,7 +244,7 @@ if($method == 'show_license') {
 			}
 			foreach($items as $k => $v) {
 				$tmp = $$key;
-				$$k = $tmp[$k];
+				$$k = addslashes($tmp[$k]);
 				if(empty($$k) || !preg_match($v['reg'], $$k)) {
 					if(empty($$k) && !$v['required']) {
 						continue;
@@ -283,6 +283,9 @@ if($method == 'show_license') {
 			show_msg('dbname_invalid', $dbname, 0);
 		} else {
 			if (strpos($dbhost, ":") === FALSE) $dbhost .= ":3306";
+
+			mysqli_report(MYSQLI_REPORT_OFF);
+
 			$link = new mysqli($dbhost, $dbuser, $dbpw);
 			if($link->connect_errno) {
 				$errno = $link->connect_errno;
@@ -327,7 +330,7 @@ if($method == 'show_license') {
 
 
 		$uid = DZUCFULL ? 1 : $adminuser['uid'];
-		$authkey = md5((isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '').$_SERVER['HTTP_USER_AGENT'].$dbhost.$dbuser.$dbpw.$dbname.$username.$password.substr(time(), 0, 8)).random(32);
+		$authkey = md5((isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '').$_SERVER['HTTP_USER_AGENT'].$dbhost.$dbuser.$dbpw.$dbname.$username.$password.substr(time(), 0, 8)).secrandom(32);
 		$_config['db'][1]['dbhost'] = $dbhost;
 		$_config['db'][1]['dbname'] = $dbname;
 		$_config['db'][1]['dbpw'] = $dbpw;
@@ -335,8 +338,8 @@ if($method == 'show_license') {
 		$_config['db'][1]['tablepre'] = $tablepre;
 		$_config['admincp']['founder'] = (string)$uid;
 		$_config['security']['authkey'] = $authkey;
-		$_config['cookie']['cookiepre'] = random(4).'_';
-		$_config['memory']['prefix'] = random(6).'_';
+		$_config['cookie']['cookiepre'] = secrandom(4).'_';
+		$_config['memory']['prefix'] = secrandom(6).'_';
 
 		save_config_file(ROOT_PATH.CONFIG, $_config, $default_config);
 
@@ -388,7 +391,13 @@ if($method == 'show_license') {
 	}
 } elseif($method == 'do_db_init') {
 	$allinfo = getgpc('allinfo');
-	extract(unserialize(base64_decode($allinfo)));
+	$allinfo_arr = unserialize(base64_decode($allinfo));
+	extract($allinfo_arr);
+
+	@set_time_limit(0);
+	@ignore_user_abort(TRUE);
+	ini_set('max_execution_time', 0);
+	ini_set('mysql.connect_timeout', 0);
 
 	$db = new dbstuff;
 	$db->connect($dbhost, $dbuser, $dbpw, $dbname, DBCHARSET);
@@ -471,13 +480,6 @@ if($method == 'show_license') {
 	if(!$homestatus) {
 		$db->query("REPLACE INTO {$tablepre}common_setting (skey, svalue) VALUES ('homestatus', '0')");
 	}
-	$yearmonth = date('Ym_', time());
-	loginit($yearmonth.'ratelog');
-	loginit($yearmonth.'illegallog');
-	loginit($yearmonth.'modslog');
-	loginit($yearmonth.'cplog');
-	loginit($yearmonth.'errorlog');
-	loginit($yearmonth.'banlog');
 
 	dir_clear(ROOT_PATH.'./data/template');
 	dir_clear(ROOT_PATH.'./data/cache');

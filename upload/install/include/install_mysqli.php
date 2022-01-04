@@ -21,6 +21,9 @@ class dbstuff {
 	function connect($dbhost, $dbuser, $dbpw, $dbname = '', $dbcharset = '', $pconnect = 0, $tablepre='', $time = 0) {
 		$this->time = $time;
 		$this->tablepre = $tablepre;
+
+		mysqli_report(MYSQLI_REPORT_OFF);
+
 		$this->link = new mysqli();
 		if(!$this->link->real_connect($dbhost, $dbuser, $dbpw, $dbname, null, null, MYSQLI_CLIENT_COMPRESS)) {
 			$this->halt('Can not connect to MySQL server');
@@ -29,10 +32,15 @@ class dbstuff {
 		if ($this->version() < '5.5.3') {
 			$this->halt('MySQL version must be 5.5.3 or greater');
 		}
+
 		if($dbcharset) {
 			$this->link->set_charset($dbcharset);
 		}
-		$this->query("SET sql_mode=''");
+
+		$this->link->query("SET sql_mode=''");
+
+		$this->link->query("SET character_set_client=binary");
+
 	}
 
 	function fetch_array($query, $result_type = MYSQLI_ASSOC) {

@@ -350,7 +350,6 @@ $lang = array(
 	'ucfounderpw' => 'Mật khẩu',
 	'ucfounderpw2' => 'Nhập lại',
 
-	'init_log' => 'Khởi tạo Log',
 	'clear_dir' => 'Thư mục trống',
 	'select_db' => 'Chọn CSDL',
 	'create_table' => 'Tạo bảng',

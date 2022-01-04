@@ -30,8 +30,6 @@ INSERT INTO pre_common_credit_rule VALUES ('22','Bình chọn','joinpoll','1','0
 INSERT INTO pre_common_credit_rule VALUES ('23','Chia sẻ','createshare','1','0','3','0','0','1','0','0','0','0','0','0','');
 INSERT INTO pre_common_credit_rule VALUES ('24','Bình luận','comment','1','0','40','1','0','1','0','0','0','0','0','0','');
 INSERT INTO pre_common_credit_rule VALUES ('25','Xem bình luận','getcomment','1','0','20','1','0','2','0','0','0','0','0','0','');
-INSERT INTO pre_common_credit_rule VALUES ('26','Thêm ứng dụng','installapp','4','0','0','3','0','0','0','0','0','0','0','0','');
-INSERT INTO pre_common_credit_rule VALUES ('27','Dùng ứng dụng','useapp','1','0','10','3','0','0','0','0','0','0','0','0','');
 INSERT INTO pre_common_credit_rule VALUES ('28','Đánh giá','click','1','0','10','1','0','0','0','0','0','0','0','0','');
 INSERT INTO pre_common_credit_rule VALUES ('29','Sửa tên miền','modifydomain','0','0','1','0','0','0','0','0','0','0','0','0','');
 INSERT INTO pre_common_credit_rule VALUES ('30','Bình luận tin tức','portalcomment','1','0','40','1','0','1','0','0','0','0','0','0','');
@@ -57,9 +55,10 @@ INSERT INTO pre_common_cron VALUES ('17','1','system','Cập nhật lượt xem 
 INSERT INTO pre_common_cron VALUES ('18','0','system','Tối ưu bảng member hàng ngày','cron_member_optimize_daily.php','1321500558','1321556400','-1','-1','2','0	5	10	15	20	25	30	35	40	45	50	55');
 INSERT INTO pre_common_cron VALUES ('19','1','system','Thống kê bài viết nóng','cron_todayheats_daily.php','1269746623','1269792000','-1','-1','0','0');
 INSERT INTO pre_common_cron VALUES ('20','1','system','Cập nhật bài viết mới','cron_security_cleanup_lastpost.php','1269746623','1269792000','-1','-1','7','0');
+INSERT INTO pre_common_cron VALUES ('21','1','system','Lưu trữ nhật ký SMS hàng tuần','cron_smslog_daily.php','1269746639','1269792000','-1','-1','03','0');
 
 INSERT INTO pre_common_friendlink VALUES ('1','0','DiscuzVN','https://discuzvn.net','Hỗ trợ Discuz Việt Nam','static/image/common/logo_88_31.gif','2');
-
+INSERT INTO pre_common_friendlink VALUES ('2','4','Cửa hàng','https://addon.dismall.com/','','','2');
 
 INSERT INTO pre_common_member_profile_setting VALUES('realname', 1, 0, 0, 'Tên thật', '', 0, 0, 0, 0, 0, 0, 1, 'text', 0, '', '');
 INSERT INTO pre_common_member_profile_setting VALUES('gender', 1, 0, 0, 'Giới tính', '', 0, 0, 0, 0, 0, 0, 1, 'select', 0, '', '');
@@ -469,6 +468,7 @@ INSERT INTO pre_common_setting VALUES ('preventrefresh','1');
 INSERT INTO pre_common_setting VALUES ('privacy','a:2:{s:4:\"view\";a:8:{s:5:\"index\";i:0;s:6:\"friend\";i:0;s:4:\"wall\";i:0;s:4:\"home\";i:0;s:5:\"doing\";i:0;s:4:\"blog\";i:0;s:5:\"album\";i:0;s:5:\"share\";i:0;}s:4:\"feed\";a:5:{s:5:\"doing\";i:1;s:4:\"blog\";i:1;s:6:\"upload\";i:1;s:4:\"poll\";i:1;s:9:\"newthread\";i:1;}}');
 INSERT INTO pre_common_setting VALUES ('profilegroup', 'a:0:{}');
 INSERT INTO pre_common_setting VALUES ('profilegroupnew','');
+INSERT INTO pre_common_setting VALUES ('profilehistory','1');
 INSERT INTO pre_common_setting VALUES ('pvfrequence','60');
 INSERT INTO pre_common_setting VALUES ('pwlength','6');
 INSERT INTO pre_common_setting VALUES ('qihoo','a:9:{s:6:\"status\";i:0;s:9:\"searchbox\";i:6;s:7:\"summary\";i:1;s:6:\"jammer\";i:1;s:9:\"maxtopics\";i:10;s:8:\"keywords\";s:0:\"\";s:10:\"adminemail\";s:0:\"\";s:8:\"validity\";i:1;s:14:\"relatedthreads\";a:6:{s:6:\"bbsnum\";i:0;s:6:\"webnum\";i:0;s:4:\"type\";a:3:{s:4:\"blog\";s:4:\"blog\";s:4:\"news\";s:4:\"news\";s:3:\"bbs\";s:3:\"bbs\";}s:6:\"banurl\";s:0:\"\";s:8:\"position\";i:1;s:8:\"validity\";i:1;}}');
@@ -541,6 +541,7 @@ INSERT INTO pre_common_setting VALUES ('site_qq','');
 INSERT INTO pre_common_setting VALUES ('smcols','8');
 INSERT INTO pre_common_setting VALUES ('smrows','5');
 INSERT INTO pre_common_setting VALUES ('smsdefaultcc','86');
+INSERT INTO pre_common_setting VALUES ('smsdefaultlength','4');
 INSERT INTO pre_common_setting VALUES ('smsglblimit','1000');
 INSERT INTO pre_common_setting VALUES ('smsinterval','300');
 INSERT INTO pre_common_setting VALUES ('smsmillimit','20');
