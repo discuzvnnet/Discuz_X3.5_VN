@@ -225,6 +225,9 @@ if($operation == 'list') {
 		$smsdefaultcc = (int)$_GET['smsdefaultccnew'];
 		$smsdefaultcc = $smsdefaultcc > 0 ? $smsdefaultcc : 86;
 		
+		$smsdefaultlength = (int)$_GET['smsdefaultlength'];
+		$smsdefaultlength = $smsdefaultlength > 0 ? $smsdefaultlength : 4;
+		
 		$smstimelimit = (int)$_GET['smstimelimitnew'];
 		$smstimelimit = $smstimelimit > 0 ? $smstimelimit : 86400;
 		
@@ -242,6 +245,7 @@ if($operation == 'list') {
 
 		C::t('common_setting')->update_setting('smsstatus', $smsstatus);
 		C::t('common_setting')->update_setting('smsdefaultcc', $smsdefaultcc);
+		C::t('common_setting')->update_setting('smsdefaultlength', $smsdefaultlength);
 		C::t('common_setting')->update_setting('smstimelimit', $smstimelimit);
 		C::t('common_setting')->update_setting('smsnumlimit', $smsnumlimit);
 		C::t('common_setting')->update_setting('smsinterval', $smsinterval);
@@ -262,6 +266,8 @@ if($operation == 'list') {
 		
 		$smsdefaultcc = C::t('common_setting')->fetch_setting('smsdefaultcc');
 		
+		$smsdefaultlength = C::t('common_setting')->fetch_setting('smsdefaultlength');
+		
 		$smstimelimit = C::t('common_setting')->fetch_setting('smstimelimit');
 		
 		$smsnumlimit = C::t('common_setting')->fetch_setting('smsnumlimit');
@@ -276,6 +282,7 @@ if($operation == 'list') {
 		showtableheader();
 		showsetting('smsgw_setting_smsstatus', 'smsstatusnew', $smsstatus, 'radio', 0, 1);
 		showsetting('smsgw_setting_smsdefaultcc', 'smsdefaultccnew', $smsdefaultcc, 'text');
+		showsetting('smsgw_setting_smsdefaultlength', 'smsdefaultlengthnew', $smsdefaultlength, 'text');
 		showsetting('smsgw_setting_smstimelimit', 'smstimelimitnew', $smstimelimit, 'text');
 		showsetting('smsgw_setting_smsnumlimit', 'smsnumlimitnew', $smsnumlimit, 'text');
 		showsetting('smsgw_setting_smsinterval', 'smsintervalnew', $smsinterval, 'text');

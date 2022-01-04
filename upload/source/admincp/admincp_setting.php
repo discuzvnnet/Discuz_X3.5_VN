@@ -1399,6 +1399,7 @@ EOF;
 		showsetting('setting_permissions_mailinterval', 'settingnew[mailinterval]', $setting['mailinterval'], 'text');
 		showsetting('setting_permissions_maxpolloptions', 'settingnew[maxpolloptions]', $setting['maxpolloptions'], 'text');
 		showsetting('setting_permissions_editby', 'settingnew[editedby]', $setting['editedby'], 'radio');
+		showsetting('setting_permissions_profilehistory', 'settingnew[profilehistory]', $setting['profilehistory'], 'radio');
 		showsetting('setting_permissions_nsprofiles', 'settingnew[nsprofiles]', $setting['nsprofiles'], 'radio');
 		showsetting('setting_permissions_modasban', 'settingnew[modasban]', $setting['modasban'], 'radio');
 
@@ -1583,6 +1584,7 @@ EOF;
 							[1,'', 'td25'],
 							[1,'<input type="text" class="txt" name="newsmtp[server][]" style="width: 90%;">', 'td28'],
 							[1,'<input type="text" class="txt" name="newsmtp[port][]" value="25">', 'td28'],
+							[1,'<input type="text" class="txt" name="newsmtp[timeout][]" value="30">', 'td28'],
 							[1,'<input type="checkbox" name="newsmtp[auth][]" value="1">', 'td25'],
 							[1,'<input type="text" class="txt" name="newsmtp[from][]" style="width: 90%;">'],
 							[1,'<input type="text" class="txt" name="newsmtp[auth_username][]" style="width: 90%;">'],
@@ -1594,7 +1596,8 @@ EOF;
 						[
 							[1,'', 'td25'],
 							[1,'<input type="text" class="txt" name="newsmtp[server][]" style="width: 90%;">', 'td28'],
-							[1,'<input type="text" class="txt" name="newsmtp[port][]" value="25">', 'td28']
+							[1,'<input type="text" class="txt" name="newsmtp[port][]" value="25">', 'td28'],
+							[1,'<input type="text" class="txt" name="newsmtp[timeout][]" value="30">', 'td28']
 						]
 					];
 				}
@@ -1608,6 +1611,7 @@ EOF;
 				<th class="td25">{$lang['delete']}</th>
 				<th class="td28">{$lang['setting_mail_setting_server']}</th>
 				<th class="td28">{$lang['setting_mail_setting_port']}</th>
+				<th class="td28">{$lang['setting_mail_setting_timeout']}</th>
 			</tr>
 EOF;
 		foreach($setting['mail']['smtp'] as $id => $smtp) {
@@ -1616,7 +1620,8 @@ EOF;
 			showtablerow('', array('class="td25"', 'class="td28"', 'class="td28"'), array(
 				"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[mail][smtp][delete][]\" value=\"$id\">",
 				"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][smtp][$id][server]\" value=\"{$smtp['server']}\" style=\"width: 90%;\">",
-				"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][smtp][$id][port]\" value=\"{$smtp['port']}\">"
+				"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][smtp][$id][port]\" value=\"{$smtp['port']}\">",
+				"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][smtp][$id][timeout]\" value=\"{$smtp['timeout']}\">"
 			));
 		}
 		echo '<tr><td colspan="7"><div><a href="###" onclick="setrowtypedata(0);addrow(this, 0);" class="addtr">'.$lang['setting_mail_setting_edit_addnew'].'</a></div></td></tr>';
@@ -1633,6 +1638,7 @@ EOF;
 				<th class="td25">{$lang['delete']}</th>
 				<th class="td28">{$lang['setting_mail_setting_server']}</th>
 				<th class="td28">{$lang['setting_mail_setting_port']}</th>
+				<th class="td28">{$lang['setting_mail_setting_timeout']}</th>
 				<th id="auth_0">{$lang['setting_mail_setting_validate']}</th>
 				<th id="from_0">{$lang['setting_mail_setting_from']}</th>
 				<th id="username_0">{$lang['setting_mail_setting_username']}</th>
@@ -1647,6 +1653,7 @@ EOF;
 			"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[mail][esmtp][delete][]\" value=\"$id\">",
 			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][server]\" value=\"{$smtp['server']}\" style=\"width: 90%;\">",
 			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][port]\" value=\"{$smtp['port']}\">",
+			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][timeout]\" value=\"{$smtp['timeout']}\">",
 			"<input type=\"checkbox\" name=\"settingnew[mail][esmtp][$id][auth]\" value=\"1\" $checkauth>",
 			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][from]\" value=\"{$smtp['from']}\" style=\"width: 90%;\">",
 			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][auth_username]\" value=\"{$smtp['auth_username']}\" style=\"width: 90%;\">",
@@ -2657,7 +2664,14 @@ EOT;
 			cpmsg('uc_config_appid_error', '', 'error');
 		}
 
+		if(!empty($settingnew['uc']['ip']) && !filter_var($settingnew['uc']['ip'], FILTER_VALIDATE_IP)) {
+			cpmsg('uc_config_ip_error', '', 'error');
+		}
+
 		if($settingnew['uc']['connect']) {
+
+			mysqli_report(MYSQLI_REPORT_OFF);
+
 			$uc_dblink = new mysqli($settingnew['uc']['dbhost'], $settingnew['uc']['dbuser'], $ucdbpassnew);
 			if(!$uc_dblink) {
 				cpmsg('uc_database_connect_error', '', 'error');
@@ -2665,6 +2679,8 @@ EOT;
 				$uc_dblink->close();
 			}
 		}
+
+		$settingnew['uc']['api'] = str_replace(array('\'', '"', '\\', "\0", "\n", "\r"), '', $settingnew['uc']['api']);
 
 		$fp = fopen('./config/config_ucenter.php', 'r');
 		$configfile = fread($fp, filesize('./config/config_ucenter.php'));
@@ -2693,12 +2709,9 @@ EOT;
 		$configfile = str_replace("define('UC_IP', '".addslashes(UC_IP)."')", "define('UC_IP', '".$settingnew['uc']['ip']."')", $configfile);
 		$configfile = str_replace("define('UC_APPID', '".addslashes(UC_APPID)."')", "define('UC_APPID', '".$settingnew['uc']['appid']."')", $configfile);
 
-		$fp = fopen('./config/config_ucenter.php', 'w');
-		if(!($fp = @fopen('./config/config_ucenter.php', 'w'))) {
+		if(file_put_contents('./config/config_ucenter.php', trim($configfile), LOCK_EX) === false) {
 			cpmsg('uc_config_write_error', '', 'error');
 		}
-		@fwrite($fp, trim($configfile));
-		@fclose($fp);
 	}
 
 	isset($settingnew['regname']) && empty($settingnew['regname']) && $settingnew['regname'] = 'register';
@@ -3183,6 +3196,7 @@ EOT;
 					$settingnew['mail']['smtp'][] = array(
 							'server' => $server,
 							'port' => $_GET['newsmtp']['port'][$id] ? intval($_GET['newsmtp']['port'][$id]) : 25,
+							'timeout' => isset($_GET['newsmtp']['timeout'][$id]) ? intval($_GET['newsmtp']['port'][$id]) : 30,
 							'auth' => $_GET['newsmtp']['auth'][$id] ? 1 : 0,
 							'from' => $_GET['newsmtp']['from'][$id],
 							'auth_username' => $_GET['newsmtp']['auth_username'][$id],

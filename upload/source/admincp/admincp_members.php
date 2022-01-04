@@ -320,6 +320,55 @@ EOF;
 	echo $detail;
 	exit();
 
+} elseif($operation == 'exphistory') {
+	
+	if(!isset($_GET['uid'])) {
+		cpmsg('members_no_find_user', '', 'error');
+	}
+	$uid = intval($_GET['uid']);
+	$detail = '';
+	if($uid) {
+		$profiles = C::t('common_member_profile_history')->fetch_all_by_uid($uid);
+		$user = C::t('common_member')->fetch($uid);
+		foreach($profiles as $hid => $profile) {
+			unset($profile['hid']);
+			$profile = array_merge(array('uid'=>$uid, 'username'=>$user['username']), $profile);
+			foreach($profile as $key => $value) {
+				$value = preg_replace('/\s+/', ' ', $value);
+				if($key == 'gender') $value = lang('space', 'gender_'.$value);
+				$detail .= strlen($value) > 11 && is_numeric($value) ? '['.$value.'],' : $value.',';
+			}
+			$detail = $detail."\n";
+		}
+	}
+	$title = array('realname' => '', 'gender' => '', 'birthyear' => '', 'birthmonth' => '', 'birthday' => '', 'constellation' => '',
+		'zodiac' => '', 'telephone' => '', 'mobile' => '', 'idcardtype' => '', 'idcard' => '', 'address' => '', 'zipcode' => '','nationality' => '',
+		'birthprovince' => '', 'birthcity' => '', 'birthdist' => '', 'birthcommunity' => '', 'resideprovince' => '', 'residecity' => '', 'residedist' => '',
+		'residecommunity' => '', 'residesuite' => '', 'graduateschool' => '', 'education' => '', 'company' => '', 'occupation' => '',
+		'position' => '', 'revenue' => '', 'affectivestatus' => '', 'lookingfor' => '', 'bloodtype' => '', 'height' => '', 'weight' => '',
+		'alipay' => '', 'icq' => '', 'qq' => '', 'yahoo' => '', 'msn' => '', 'taobao' => '', 'site' => '', 'bio' => '', 'interest' => '',
+		'field1' => '', 'field2' => '', 'field3' => '', 'field4' => '', 'field5' => '', 'field6' => '', 'field7' => '', 'field8' => '');
+	foreach(C::t('common_member_profile_setting')->range_setting() as $value) {
+		if(isset($title[$value['fieldid']])) {
+			$title[$value['fieldid']] = $value['title'];
+		}
+	}
+	foreach($title as $k => $v) {
+		$subject .= ($v ? $v : $k).",";
+	}
+	$detail = "UID,".$lang['username'].",".$subject."\n".$detail;
+	$filename = date('Ymd', TIMESTAMP).'_history.csv';
+
+	ob_end_clean();
+	header('Content-Encoding: none');
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename='.$filename);
+	header('Pragma: no-cache');
+	header('Expires: 0');
+	echo $detail;
+	define('FOOTERDISABLED' , 1);
+	exit();
+
 } elseif($operation == 'repeat') {
 
 	if(empty($_GET['uid']) && empty($_GET['username']) && empty($_GET['ip'])) {
@@ -2163,6 +2212,10 @@ EOF;
 			}
 		}
 
+		
+		showsetting('members_edit_exphistory', '', '', "<a href=\"".ADMINSCRIPT."?action=members&operation=exphistory&uid={$member['uid']}\" class=\"act\">{$lang['members_edit_exphistory']}</a>");
+		
+
 		showsubmit('editsubmit');
 		showtablefooter();
 		showformfooter();
@@ -2259,6 +2312,9 @@ EOF;
 		$addsize = intval($_GET['addsizenew']);
 		$addfriend = intval($_GET['addfriendnew']);
 		$status = intval($_GET['statusnew']) ? -1 : 0;
+		if($status == -1 && $member['groupid'] == 1) {
+			cpmsg('members_edit_lock', '', 'error', array('grouptitle' => $member['grouptitle'], 'uid' => $member['uid']));
+		}
 		$freeze = in_array($_GET['freezenew'], array(-1, 0, 1, 2)) ? $_GET['freezenew'] : 0;
 		$emailstatusnew = intval($_GET['emailstatusnew']);
 		$secmobilestatusnew = intval($_GET['secmobilestatusnew']);
@@ -3443,7 +3499,9 @@ function notifymembers($operation, $variable) {
 					runlog('sendmail', "{$member['email']} sendmail failed.");
 				}
 			} elseif($_GET['notifymembers'] == 'sms') {
-				sms::sendmessage($member['uid'], 1, $member['secmobicc'], $member['secmobile'], "[$subject]$message$addmsg", 1);
+				
+				
+				sms::send($member['uid'], 1, 2, $member['secmobicc'], $member['secmobile'], "[$subject]$message$addmsg", 1);
 			}
 
 			$log = array();
